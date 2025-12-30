@@ -1,0 +1,34 @@
+syntax = "proto3";
+package clauseInclusion;
+
+service ClauseInclusionService{
+
+    rpc VerifyClauseInclusion(VerifyClauseInclusionRequest) returns (VerifyClauseInclusionResponse);
+
+}
+
+message VerifyClauseInclusionRequest{
+
+    string agreementId = 1;
+    string clauseSetHashId = 2;
+    string commitment = 3;
+
+}
+
+message VerifyClauseInclusionResponse{
+
+    bool success = 1;
+    string message = 2;
+    bool isValid = 3;
+
+
+}
+/*
+
+protoc \
+  -I ${PWD}/proto \
+  --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts_proto \
+  --ts_out="esModuleInterop=true,outputServices=grpc-js,outputClientImpl=true,forceLong=false,useOptionals=true:${PWD}/src/protoOutput" \
+  ${PWD}/proto/clauseInclusion.proto
+
+*/
