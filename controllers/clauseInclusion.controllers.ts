@@ -28,18 +28,18 @@ export const clauseInclusionVerification = async(req: FastifyRequest, res: Fasti
 
     try {
 
-        const {agreementId, clauseSetHashId,commitment} = req.body as VerifyClauseInclusionRequest;
+        const {agreementId, clauseSetHash,commitment} = req.body as VerifyClauseInclusionRequest;
 
-        if(!agreementId || !clauseSetHashId || !commitment){
+        if(!agreementId || !clauseSetHash || !commitment){
 
-            errorResponse(res, 400, "please provide agreementId, clauseSetHashId,commitment");
+            errorResponse(res, 400, "please provide agreementId, clauseSetHash,commitment");
             return;
 
         }
 
         const response = await new Promise((resolve, reject) => {
 
-            clauseInclusionClient.VerifyClauseInclusion({agreementId, clauseSetHashId, commitment}, (err: grpc.ServiceError, success: VerifyClauseInclusionResponse) => {
+            clauseInclusionClient.VerifyClauseInclusion({agreementId, clauseSetHash, commitment}, (err: grpc.ServiceError, success: VerifyClauseInclusionResponse) => {
 
                 if(err){
 
