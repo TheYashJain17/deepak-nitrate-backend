@@ -22,6 +22,7 @@
     "ethers": "^6.16.0",
     "fastify": "^5.6.1",
     "nodemon": "^3.1.10",
+    "snarkjs": "^0.7.5",
     "ts-proto": "^2.7.7",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
@@ -31,6 +32,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/nodemailer": "^7.0.3",
     "@types/pg": "^8.16.0",
+    "@types/snarkjs": "^0.7.9",
     "dotenv-cli": "^11.0.0"
   }
 }

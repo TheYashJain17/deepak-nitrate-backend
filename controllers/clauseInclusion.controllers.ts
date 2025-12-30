@@ -4,6 +4,7 @@ import getContractInstance from "../src/utils/utilities/getContractInstance";
 
 import path from "path";
 import { GenerateProofType } from "../src/types/types";
+import generateProof from "../src/utils/utilities/generateProof";
 
 const WASM_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/clauseInclusion.wasm");
 const ZKEY_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/clauseInclusion_final.zkey");
