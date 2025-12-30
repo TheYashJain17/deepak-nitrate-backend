@@ -17,22 +17,22 @@ export const ClauseInclusionServiceHandlers: ClauseInclusionServiceServer = {
 
         try {
 
-            const { agreementId, clauseSetHashId, commitment } = call.request as VerifyClauseInclusionRequest;
+            const { agreementId, clauseSetHash, commitment } = call.request as VerifyClauseInclusionRequest;
 
-            if (!agreementId || !clauseSetHashId || !commitment) {
+            if (!agreementId || !clauseSetHash || !commitment) {
 
-                callback({ code: Status.INVALID_ARGUMENT, message: "please provide agreementId,clauseSetHashId,commitment" });
+                callback({ code: Status.INVALID_ARGUMENT, message: "please provide agreementId,clauseSetHash,commitment" });
                 return;
 
             }
 
             // const data = {
-            //     agreementId, clauseSetHashId
+            //     agreementId, clauseSetHash
             // }
 
             // const commitment = await getCommitmentHash(data) as string;
 
-            const { a: A, b: B, c: C, inputSignals } = await generateProof({ agreementId, clauseSetHashId, commitment }, WASM_PATH, ZKEY_PATH) as GenerateProofType;
+            const { a: A, b: B, c: C, inputSignals } = await generateProof({ agreementId, clauseSetHash, commitment }, WASM_PATH, ZKEY_PATH) as GenerateProofType;
 
             if (!A || !B || !C || !inputSignals) {
 
@@ -80,7 +80,8 @@ export const ClauseInclusionServiceHandlers: ClauseInclusionServiceServer = {
 
             console.log("the errormsg we are getting is", errorMsg);
 
-            callback({ message: errorMsg, code: Status.INTERNAL });
+            // callback({ message: errorMsg, code: Status.INTERNAL });
+            callback(null, {message: "Condition Failed,Should be Invoice total ≤ PO balance", isValid: false, success: false })
             return;
 
         }

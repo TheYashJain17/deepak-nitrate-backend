@@ -23,7 +23,7 @@ export const protobufPackage = "clauseInclusion";
 
 export interface VerifyClauseInclusionRequest {
   agreementId: string;
-  clauseSetHashId: string;
+  clauseSetHash: string;
   commitment: string;
 }
 
@@ -34,7 +34,7 @@ export interface VerifyClauseInclusionResponse {
 }
 
 function createBaseVerifyClauseInclusionRequest(): VerifyClauseInclusionRequest {
-  return { agreementId: "", clauseSetHashId: "", commitment: "" };
+  return { agreementId: "", clauseSetHash: "", commitment: "" };
 }
 
 export const VerifyClauseInclusionRequest: MessageFns<VerifyClauseInclusionRequest> = {
@@ -42,8 +42,8 @@ export const VerifyClauseInclusionRequest: MessageFns<VerifyClauseInclusionReque
     if (message.agreementId !== "") {
       writer.uint32(10).string(message.agreementId);
     }
-    if (message.clauseSetHashId !== "") {
-      writer.uint32(18).string(message.clauseSetHashId);
+    if (message.clauseSetHash !== "") {
+      writer.uint32(18).string(message.clauseSetHash);
     }
     if (message.commitment !== "") {
       writer.uint32(26).string(message.commitment);
@@ -71,7 +71,7 @@ export const VerifyClauseInclusionRequest: MessageFns<VerifyClauseInclusionReque
             break;
           }
 
-          message.clauseSetHashId = reader.string();
+          message.clauseSetHash = reader.string();
           continue;
         }
         case 3: {
@@ -94,7 +94,7 @@ export const VerifyClauseInclusionRequest: MessageFns<VerifyClauseInclusionReque
   fromJSON(object: any): VerifyClauseInclusionRequest {
     return {
       agreementId: isSet(object.agreementId) ? globalThis.String(object.agreementId) : "",
-      clauseSetHashId: isSet(object.clauseSetHashId) ? globalThis.String(object.clauseSetHashId) : "",
+      clauseSetHash: isSet(object.clauseSetHash) ? globalThis.String(object.clauseSetHash) : "",
       commitment: isSet(object.commitment) ? globalThis.String(object.commitment) : "",
     };
   },
@@ -104,8 +104,8 @@ export const VerifyClauseInclusionRequest: MessageFns<VerifyClauseInclusionReque
     if (message.agreementId !== "") {
       obj.agreementId = message.agreementId;
     }
-    if (message.clauseSetHashId !== "") {
-      obj.clauseSetHashId = message.clauseSetHashId;
+    if (message.clauseSetHash !== "") {
+      obj.clauseSetHash = message.clauseSetHash;
     }
     if (message.commitment !== "") {
       obj.commitment = message.commitment;
@@ -119,7 +119,7 @@ export const VerifyClauseInclusionRequest: MessageFns<VerifyClauseInclusionReque
   fromPartial<I extends Exact<DeepPartial<VerifyClauseInclusionRequest>, I>>(object: I): VerifyClauseInclusionRequest {
     const message = createBaseVerifyClauseInclusionRequest();
     message.agreementId = object.agreementId ?? "";
-    message.clauseSetHashId = object.clauseSetHashId ?? "";
+    message.clauseSetHash = object.clauseSetHash ?? "";
     message.commitment = object.commitment ?? "";
     return message;
   },

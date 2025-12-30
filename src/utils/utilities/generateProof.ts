@@ -2,7 +2,7 @@ import * as snarkjs from "snarkjs";
 import { GenerateProofType } from "../../types/types";
 
 
-const generateProof = async (inputs: {agreementId: string, clauseSetHashId: string, commitment: string} , WASM_PATH:string, ZKEY_PATH: string): Promise<GenerateProofType | void> => {
+const generateProof = async (inputs: {agreementId: string, clauseSetHash: string, commitment: string} , WASM_PATH:string, ZKEY_PATH: string): Promise<GenerateProofType | void> => {
 
 
     try {

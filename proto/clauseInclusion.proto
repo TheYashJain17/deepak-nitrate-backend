@@ -10,7 +10,7 @@ service ClauseInclusionService{
 message VerifyClauseInclusionRequest{
 
     string agreementId = 1;
-    string clauseSetHashId = 2;
+    string clauseSetHash = 2;
     string commitment = 3;
 
 }
