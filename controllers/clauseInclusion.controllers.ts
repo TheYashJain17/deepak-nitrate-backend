@@ -6,6 +6,24 @@ import grpc from "@grpc/grpc-js";
 import { getGrpcToHttpStatus } from "../src/utils/utilities/getHTTPStatusCode";
 import successResponse from "../src/utils/responses/success.response";
 
+export const healthRoute = async(req: FastifyRequest, res: FastifyReply) => {[]
+
+    try {
+        
+        successResponse(res,200,"Goodbye World")
+
+    } catch (error) {
+
+        console.log(error);
+
+        errorResponse(res,500,"Internal Server Error");
+
+        return;
+        
+    }
+
+}
+
 export const clauseInclusionVerification = async(req: FastifyRequest, res: FastifyReply) => {
 
     try {

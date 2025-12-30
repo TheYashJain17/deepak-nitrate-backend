@@ -1,9 +1,11 @@
 import { FastifyInstance } from "fastify";
-import { clauseInclusionVerification } from "../../controllers/clauseInclusion.controllers";
+import { clauseInclusionVerification, healthRoute } from "../../controllers/clauseInclusion.controllers";
 
 const clauseInclusionRoutes = (fastify: FastifyInstance) => {
 
+    fastify.get("/", healthRoute);
     fastify.post("/clauseInclusion/verify", clauseInclusionVerification);
+
 
 }
 
