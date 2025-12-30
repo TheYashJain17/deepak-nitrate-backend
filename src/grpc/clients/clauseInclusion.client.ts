@@ -10,6 +10,6 @@ const packageDef = protoLoader.loadSync(PROTO_PATH);
 
 const clauseInclusionObj = grpc.loadPackageDefinition(packageDef) as any;
 
-const clauseInclusionClient = clauseInclusionObj.clauseInclusion.ClauseInclusionService("0.0.0.0:50051", grpc.credentials.createInsecure());
+const clauseInclusionClient = new clauseInclusionObj.clauseInclusion.ClauseInclusionService("0.0.0.0:50051", grpc.credentials.createInsecure());
 
 export default clauseInclusionClient;
