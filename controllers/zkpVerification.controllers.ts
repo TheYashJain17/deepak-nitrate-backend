@@ -1,5 +1,5 @@
 import { Status } from "@grpc/grpc-js/build/src/constants";
-import { BGExpiryCheckRequest, VerifyClauseInclusionRequest, ZKPVerificationServiceServer } from "../src/protoOutput/zkpVerification";
+import { AmountWithinRangeRequest, BGExpiryCheckRequest, VerifyClauseInclusionRequest, ZKPVerificationServiceServer } from "../src/protoOutput/zkpVerification";
 import getContractInstance from "../src/utils/utilities/getContractInstance";
 
 import path from "path";
@@ -10,6 +10,8 @@ import { clauseInclusionAbi } from "../src/utils/ABIs/clauseInclusion.abi";
 import generateClauseInclusionProof from "../src/utils/generateProofs/generateClauseInclusionProof";
 import generateBGExpiryCheckProof from "../src/utils/generateProofs/generateBGExpiryCheckProof";
 import { BGExpiryAbi } from "../src/utils/ABIs/bgExpiryCheck.abi";
+import generateAmountWithinRangeProof from "../src/utils/generateProofs/generateAmountWithinRangeProof";
+import { AmountWithinRangeAbi } from "../src/utils/ABIs/amountWithinRange.abi";
 
 
 const isZKPError = (error: unknown): error is ZKPErrorType => {
@@ -137,6 +139,61 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
             callback({ message: "Internal Server Error", code: Status.INTERNAL, details: JSON.stringify({ isValid: false, success: false }) }, null);
             return;
 
+
+        }
+
+    },
+
+    async amountWithinRange(call, callback) {
+
+        const WASM_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/amountWithinRange/amountWithinRange.wasm");
+        const ZKEY_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/amountWithinRange/amountWithinRange_final.zkey");
+
+        let isProofValid: boolean;
+
+        try {
+
+            const { invoiceTotal, poBalance, poBalanceHash } = call.request as AmountWithinRangeRequest;
+
+            if (!invoiceTotal || !poBalance || !poBalanceHash) {
+
+                callback({ code: Status.INVALID_ARGUMENT, message: "please provide invoiceTotal, poBalance, poBalanceHash" });
+                return;
+
+            }
+
+            const { a: A, b: B, c: C, inputSignals } = await generateAmountWithinRangeProof({ invoiceTotal, poBalance, poBalance_hash: poBalanceHash }, WASM_PATH, ZKEY_PATH) as GenerateProofType;
+
+            if (!A || !B || !C || !inputSignals) {
+
+                callback({ code: Status.NOT_FOUND, message: "Failed To Generate Proof" });
+                return;
+
+            }
+
+
+            console.log("The public signals we are getting is ", inputSignals);
+
+            const contract = await getContractInstance(process.env.AMOUNT_WITHIN_RANGE_CONTRACT_ADDRESS as string, AmountWithinRangeAbi);
+
+
+            isProofValid = await contract.verifyAmoutWithinRangeCommitment(A, B, C, inputSignals);
+
+            console.log("the result we are getting is", isProofValid);
+
+            callback(null, { isValid: isProofValid, message: "success", success: true });
+
+        } catch (error) {
+
+            console.log("The error we are getting is", error);
+
+            if (isZKPError(error)) {
+
+                callback({ message: error?.code, details: JSON.stringify({ isValid: false, success: false }), code: error.statusCode }, null);
+                return
+            }
+            callback({ message: "Internal Server Error", code: Status.INTERNAL, details: JSON.stringify({ isValid: false, success: false }) }, null);
+            return;
 
         }
 
