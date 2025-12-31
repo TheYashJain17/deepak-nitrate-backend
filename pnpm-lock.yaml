@@ -38,9 +38,6 @@ importers:
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
-      wire:
-        specifier: link:@bufbuild/protobuf/wire
-        version: link:@bufbuild/protobuf/wire
 
 packages:
 

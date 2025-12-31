@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { clauseInclusionVerification, healthRoute } from "../../controllers/clauseInclusion.controllers";
+import { clauseInclusionVerification, healthRoute } from "../../controllers/zkpVerification.controllers";
 
 const clauseInclusionRoutes = (fastify: FastifyInstance) => {
 

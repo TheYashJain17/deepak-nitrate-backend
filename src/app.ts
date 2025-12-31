@@ -1,6 +1,6 @@
 import fastify from "fastify";
 import cors from "@fastify/cors";
-import clauseInclusionRoutes from "./routes/clauseInclusion.routes";
+import zkpVerificationRoutes from "./routes/zkpVerification.routes";
 
 const Fastify = fastify({logger: true});
 
@@ -10,6 +10,6 @@ Fastify.register(cors, {
 
 });
 
-Fastify.register(clauseInclusionRoutes, {prefix: "/api/v1/zkp"});
+Fastify.register(zkpVerificationRoutes, {prefix: "/api/v1/zkp"});
 
 export default Fastify;

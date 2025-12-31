@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import errorResponse from "../src/utils/responses/error.response";
-import { VerifyClauseInclusionRequest, VerifyClauseInclusionResponse } from "../types/clauseInclusion.types";
-import clauseInclusionClient from "../src/grpc/clients/clauseInclusion.client";
+import { VerifyClauseInclusionRequest, VerifyClauseInclusionResponse } from "../types/zkpVerification.types";
+import zkpVerificationClient from "../src/grpc/clients/zkpVerification.client";
 import grpc from "@grpc/grpc-js";
 import { getGrpcToHttpStatus } from "../src/utils/utilities/getHTTPStatusCode";
 import successResponse from "../src/utils/responses/success.response";
@@ -39,11 +39,22 @@ export const clauseInclusionVerification = async(req: FastifyRequest, res: Fasti
 
         const response = await new Promise((resolve, reject) => {
 
-            clauseInclusionClient.VerifyClauseInclusion({agreementId, clauseSetHash, commitment}, (err: grpc.ServiceError, success: VerifyClauseInclusionResponse) => {
+            zkpVerificationClient.VerifyClauseInclusion({agreementId, clauseSetHash, commitment}, (err: grpc.ServiceError, success: VerifyClauseInclusionResponse) => {
 
                 if(err){
 
                     const httpCode = getGrpcToHttpStatus(err.code);
+
+                    const match = err?.message?.match(/{.*}/)
+
+                    // if(err?.message?.includes(`{"isValid":false,"success":false}`)){
+                    if(match){
+
+                        errorResponse(res, httpCode, JSON.parse(match[0]));
+                        // errorResponse(res, httpCode, err.message);
+                        return;
+
+                    }
 
                     errorResponse(res, httpCode, err.message);
                     reject(err);

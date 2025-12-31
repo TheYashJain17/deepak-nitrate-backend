@@ -1,7 +1,7 @@
 syntax = "proto3";
-package clauseInclusion;
+package zkpVerification;
 
-service ClauseInclusionService{
+service ZKPVerificationService{
 
     rpc VerifyClauseInclusion(VerifyClauseInclusionRequest) returns (VerifyClauseInclusionResponse);
 
@@ -29,6 +29,6 @@ protoc \
   -I ${PWD}/proto \
   --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts_proto \
   --ts_out="esModuleInterop=true,outputServices=grpc-js,outputClientImpl=true,forceLong=false,useOptionals=true:${PWD}/src/protoOutput" \
-  ${PWD}/proto/clauseInclusion.proto
+  ${PWD}/proto/zkpVerification.proto
 
 */
