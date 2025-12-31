@@ -1,15 +1,16 @@
 import { Status } from "@grpc/grpc-js/build/src/constants";
-import { VerifyClauseInclusionRequest, ZKPVerificationServiceServer } from "../src/protoOutput/zkpVerification";
+import { BGExpiryCheckRequest, VerifyClauseInclusionRequest, ZKPVerificationServiceServer } from "../src/protoOutput/zkpVerification";
 import getContractInstance from "../src/utils/utilities/getContractInstance";
 
 import path from "path";
 import { GenerateProofType, ZKPErrorType } from "../src/types/types";
-import generateProof from "../src/utils/utilities/generateProof";
+
 
 import { clauseInclusionAbi } from "../src/utils/ABIs/clauseInclusion.abi";
+import generateClauseInclusionProof from "../src/utils/generateProofs/generateClauseInclusionProof";
+import generateBGExpiryCheckProof from "../src/utils/generateProofs/generateBGExpiryCheckProof";
+import { BGExpiryAbi } from "../src/utils/ABIs/bgExpiryCheck.abi";
 
-const WASM_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/clauseInclusion/clauseInclusion.wasm");
-const ZKEY_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/clauseInclusion/clauseInclusion_final.zkey");
 
 const isZKPError = (error: unknown): error is ZKPErrorType => {
     return (
@@ -28,6 +29,10 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
 
         let isProofValid: boolean;
 
+
+        const WASM_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/clauseInclusion/clauseInclusion.wasm");
+        const ZKEY_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/clauseInclusion/clauseInclusion_final.zkey");
+
         try {
 
             const { agreementId, clauseSetHash, commitment } = call.request as VerifyClauseInclusionRequest;
@@ -39,17 +44,11 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
 
             }
 
-            // const data = {
-            //     agreementId, clauseSetHash
-            // }
-
-            // const commitment = await getCommitmentHash(data) as string;
-
-            const { a: A, b: B, c: C, inputSignals } = await generateProof({ agreementId, clauseSetHash, commitment }, WASM_PATH, ZKEY_PATH) as GenerateProofType;
+            const { a: A, b: B, c: C, inputSignals } = await generateClauseInclusionProof({ agreementId, clauseSetHash, commitment }, WASM_PATH, ZKEY_PATH) as GenerateProofType;
 
             if (!A || !B || !C || !inputSignals) {
 
-                callback({message: "Failed To Generate Proof", code: Status.NOT_FOUND});
+                callback({ message: "Failed To Generate Proof", code: Status.NOT_FOUND });
                 return;
 
             }
@@ -66,7 +65,7 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
 
             console.log("the result we are getting is", isProofValid);
 
-            callback(null, {success: true, message: "success", isValid: isProofValid})
+            callback(null, { success: true, message: "success", isValid: isProofValid })
 
 
         } catch (error: unknown) {
@@ -74,18 +73,70 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
             // console.log(error);
 
             console.log("The error we are getting is", error);
-            
-            if(isZKPError(error)){
 
-                callback({message: error?.code, details: JSON.stringify({isValid: false, success: false}), code: error.statusCode}, null);
+            if (isZKPError(error)) {
+
+                callback({ message: error?.code, details: JSON.stringify({ isValid: false, success: false }), code: error.statusCode }, null);
                 return
             }
-
-
-            // callback({ message: errorMsg, code: Status.INTERNAL });
-            // callback(null, {message: "Internal Server Error", isValid: false, success: false })
-            callback({message: "Internal Server Error", code: Status.INTERNAL, details: JSON.stringify({isValid: false, success: false}) }, null);
+            callback({ message: "Internal Server Error", code: Status.INTERNAL, details: JSON.stringify({ isValid: false, success: false }) }, null);
             return;
+
+        }
+
+    },
+
+    async bgExpiryCheck(call, callback) {
+
+        const WASM_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/bgExpiryCheck/bgExpiryCheck.wasm");
+        const ZKEY_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/bgExpiryCheck/bgExpiryCheck_final.zkey");
+
+        let isProofValid: boolean;
+
+        try {
+
+            const { bgExpiry, NDays, POEndDate, bgExpiryHash } = call.request as BGExpiryCheckRequest;
+
+            if (!bgExpiry || !NDays || !POEndDate || !bgExpiryHash) {
+
+                callback({ code: Status.INVALID_ARGUMENT, message: "please provide bgExpiry,NDays,POEndDate,bgExpiryHash" });
+                return;
+
+            }
+
+            const { a: A, b: B, c: C, inputSignals } = await generateBGExpiryCheckProof({ bg_expiry: bgExpiry, bg_expiry_hash: bgExpiryHash, N_days: NDays, PO_end_date: POEndDate }, WASM_PATH, ZKEY_PATH) as GenerateProofType;
+
+            if (!A || !B || !C || !inputSignals) {
+
+                callback({ code: Status.NOT_FOUND, message: "Failed To Generate Proof" });
+                return;
+
+            }
+
+            console.log("The public signals we are getting is ", inputSignals);
+
+            const contract = await getContractInstance(process.env.BG_EXPIRY_CHECK_CONTRACT_ADDRESS as string, BGExpiryAbi);
+
+            isProofValid = await contract.verifyBG(A, B, C, inputSignals);
+
+            console.log("the result we are getting is", isProofValid);
+
+            callback(null, { isValid: isProofValid, message: "sucess", success: true });
+
+
+        } catch (error) {
+
+
+            console.log("The error we are getting is", error);
+
+            if (isZKPError(error)) {
+
+                callback({ message: error?.code, details: JSON.stringify({ isValid: false, success: false }), code: error.statusCode }, null);
+                return
+            }
+            callback({ message: "Internal Server Error", code: Status.INTERNAL, details: JSON.stringify({ isValid: false, success: false }) }, null);
+            return;
+
 
         }
 
