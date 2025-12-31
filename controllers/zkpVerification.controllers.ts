@@ -1,15 +1,28 @@
 import { Status } from "@grpc/grpc-js/build/src/constants";
-import { ClauseInclusionServiceServer, VerifyClauseInclusionRequest } from "../src/protoOutput/clauseInclusion";
+import { VerifyClauseInclusionRequest, ZKPVerificationServiceServer } from "../src/protoOutput/zkpVerification";
 import getContractInstance from "../src/utils/utilities/getContractInstance";
 
 import path from "path";
-import { GenerateProofType } from "../src/types/types";
+import { GenerateProofType, ZKPErrorType } from "../src/types/types";
 import generateProof from "../src/utils/utilities/generateProof";
 
-const WASM_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/clauseInclusion.wasm");
-const ZKEY_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/clauseInclusion_final.zkey");
+import { clauseInclusionAbi } from "../src/utils/ABIs/clauseInclusion.abi";
 
-export const ClauseInclusionServiceHandlers: ClauseInclusionServiceServer = {
+const WASM_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/clauseInclusion/clauseInclusion.wasm");
+const ZKEY_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/clauseInclusion/clauseInclusion_final.zkey");
+
+const isZKPError = (error: unknown): error is ZKPErrorType => {
+    return (
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error &&
+        "userMessage" in error &&
+        "statusCode" in error
+    );
+};
+
+
+export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
 
     async verifyClauseInclusion(call, callback) {
 
@@ -47,7 +60,7 @@ export const ClauseInclusionServiceHandlers: ClauseInclusionServiceServer = {
             console.log("input signals", inputSignals)
 
 
-            const contract = await getContractInstance();
+            const contract = await getContractInstance(process.env.CLAUSE_INCLUSION_CONTRACT_ADDRESS as string, clauseInclusionAbi);
 
             isProofValid = await contract.verifyClauseInclusionCommitment(agreementId, A, B, C, inputSignals);
 
@@ -56,32 +69,22 @@ export const ClauseInclusionServiceHandlers: ClauseInclusionServiceServer = {
             callback(null, {success: true, message: "success", isValid: isProofValid})
 
 
-        } catch (error: any) {
+        } catch (error: unknown) {
 
-            console.log(error);
+            // console.log(error);
 
             console.log("The error we are getting is", error);
+            
+            if(isZKPError(error)){
 
-            let errorMsg: string;
-
-            if (error?.revert?.args[0]) {
-
-                errorMsg = error?.revert?.args[0];
-
-            } else if (error?.message?.includes("CONSTRAINT")) {
-
-                errorMsg = "Condition Failed,Should be Invoice total ≤ PO balance";
-
-            } else {
-
-                errorMsg = "Internal Server Error";
-
+                callback({message: error?.code, details: JSON.stringify({isValid: false, success: false}), code: error.statusCode}, null);
+                return
             }
 
-            console.log("the errormsg we are getting is", errorMsg);
 
             // callback({ message: errorMsg, code: Status.INTERNAL });
-            callback(null, {message: "Condition Failed,Should be Invoice total ≤ PO balance", isValid: false, success: false })
+            // callback(null, {message: "Internal Server Error", isValid: false, success: false })
+            callback({message: "Internal Server Error", code: Status.INTERNAL, details: JSON.stringify({isValid: false, success: false}) }, null);
             return;
 
         }

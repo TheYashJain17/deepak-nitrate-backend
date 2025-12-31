@@ -2,7 +2,7 @@
 // versions:
 //   protoc-gen-ts_proto  v2.10.1
 //   protoc               v6.32.1
-// source: clauseInclusion.proto
+// source: zkpVerification.proto
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
@@ -19,7 +19,7 @@ import {
   type UntypedServiceImplementation,
 } from "@grpc/grpc-js";
 
-export const protobufPackage = "clauseInclusion";
+export const protobufPackage = "zkpVerification";
 
 export interface VerifyClauseInclusionRequest {
   agreementId: string;
@@ -219,10 +219,10 @@ export const VerifyClauseInclusionResponse: MessageFns<VerifyClauseInclusionResp
   },
 };
 
-export type ClauseInclusionServiceService = typeof ClauseInclusionServiceService;
-export const ClauseInclusionServiceService = {
+export type ZKPVerificationServiceService = typeof ZKPVerificationServiceService;
+export const ZKPVerificationServiceService = {
   verifyClauseInclusion: {
-    path: "/clauseInclusion.ClauseInclusionService/VerifyClauseInclusion",
+    path: "/zkpVerification.ZKPVerificationService/VerifyClauseInclusion",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: VerifyClauseInclusionRequest): Buffer =>
@@ -234,11 +234,11 @@ export const ClauseInclusionServiceService = {
   },
 } as const;
 
-export interface ClauseInclusionServiceServer extends UntypedServiceImplementation {
+export interface ZKPVerificationServiceServer extends UntypedServiceImplementation {
   verifyClauseInclusion: handleUnaryCall<VerifyClauseInclusionRequest, VerifyClauseInclusionResponse>;
 }
 
-export interface ClauseInclusionServiceClient extends Client {
+export interface ZKPVerificationServiceClient extends Client {
   verifyClauseInclusion(
     request: VerifyClauseInclusionRequest,
     callback: (error: ServiceError | null, response: VerifyClauseInclusionResponse) => void,
@@ -256,16 +256,16 @@ export interface ClauseInclusionServiceClient extends Client {
   ): ClientUnaryCall;
 }
 
-export const ClauseInclusionServiceClient = makeGenericClientConstructor(
-  ClauseInclusionServiceService,
-  "clauseInclusion.ClauseInclusionService",
+export const ZKPVerificationServiceClient = makeGenericClientConstructor(
+  ZKPVerificationServiceService,
+  "zkpVerification.ZKPVerificationService",
 ) as unknown as {
   new (
     address: string,
     credentials: ChannelCredentials,
     options?: Partial<ClientOptions>,
-  ): ClauseInclusionServiceClient;
-  service: typeof ClauseInclusionServiceService;
+  ): ZKPVerificationServiceClient;
+  service: typeof ZKPVerificationServiceService;
   serviceName: string;
 };
 

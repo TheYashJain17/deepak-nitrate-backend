@@ -1,5 +1,5 @@
 {
-  "name": "clause-inclusion-service",
+  "name": "zkp-verification-service",
   "version": "1.0.0",
   "description": "",
   "main": "server.ts",

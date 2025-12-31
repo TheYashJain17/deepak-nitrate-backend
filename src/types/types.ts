@@ -7,3 +7,11 @@ export type GenerateProofType = {
 
 
 }
+
+export type ZKPErrorType = {
+
+    code: string;
+    userMessage: string;
+    statusCode: number;
+
+}
