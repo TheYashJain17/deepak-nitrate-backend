@@ -4,6 +4,7 @@ package zkpVerification;
 service ZKPVerificationService{
 
     rpc VerifyClauseInclusion(VerifyClauseInclusionRequest) returns (VerifyClauseInclusionResponse);
+    rpc BGExpiryCheck(BGExpiryCheckRequest) returns (BGExpiryCheckResponse);
 
 }
 
@@ -21,8 +22,28 @@ message VerifyClauseInclusionResponse{
     string message = 2;
     bool isValid = 3;
 
+}
+
+message BGExpiryCheckRequest{
+
+    string bgExpiry = 1; 
+    string POEndDate = 2;
+    string NDays = 3;
+    string bgExpiryHash = 4; 
 
 }
+
+message BGExpiryCheckResponse{
+
+    bool success = 1;
+    string message = 2;
+    bool isValid = 3;
+
+
+}
+
+
+
 /*
 
 protoc \

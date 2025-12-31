@@ -1,36 +1,37 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import errorResponse from "../src/utils/responses/error.response";
-import { VerifyClauseInclusionRequest, VerifyClauseInclusionResponse } from "../types/zkpVerification.types";
+import { BGExpiryCheckRequest, BGExpiryCheckResponse, VerifyClauseInclusionRequest, VerifyClauseInclusionResponse } from "../types/zkpVerification.types";
 import zkpVerificationClient from "../src/grpc/clients/zkpVerification.client";
 import grpc from "@grpc/grpc-js";
 import { getGrpcToHttpStatus } from "../src/utils/utilities/getHTTPStatusCode";
 import successResponse from "../src/utils/responses/success.response";
 
-export const healthRoute = async(req: FastifyRequest, res: FastifyReply) => {[]
+export const healthRoute = async (req: FastifyRequest, res: FastifyReply) => {
+    []
 
     try {
-        
-        successResponse(res,200,"Goodbye World")
+
+        successResponse(res, 200, "Goodbye World")
 
     } catch (error) {
 
         console.log(error);
 
-        errorResponse(res,500,"Internal Server Error");
+        errorResponse(res, 500, "Internal Server Error");
 
         return;
-        
+
     }
 
 }
 
-export const clauseInclusionVerification = async(req: FastifyRequest, res: FastifyReply) => {
+export const clauseInclusionVerification = async (req: FastifyRequest, res: FastifyReply) => {
 
     try {
 
-        const {agreementId, clauseSetHash,commitment} = req.body as VerifyClauseInclusionRequest;
+        const { agreementId, clauseSetHash, commitment } = req.body as VerifyClauseInclusionRequest;
 
-        if(!agreementId || !clauseSetHash || !commitment){
+        if (!agreementId || !clauseSetHash || !commitment) {
 
             errorResponse(res, 400, "please provide agreementId, clauseSetHash,commitment");
             return;
@@ -39,19 +40,16 @@ export const clauseInclusionVerification = async(req: FastifyRequest, res: Fasti
 
         const response = await new Promise((resolve, reject) => {
 
-            zkpVerificationClient.VerifyClauseInclusion({agreementId, clauseSetHash, commitment}, (err: grpc.ServiceError, success: VerifyClauseInclusionResponse) => {
+            zkpVerificationClient.VerifyClauseInclusion({ agreementId, clauseSetHash, commitment }, (err: grpc.ServiceError, success: VerifyClauseInclusionResponse) => {
 
-                if(err){
+                if (err) {
 
                     const httpCode = getGrpcToHttpStatus(err.code);
 
                     const match = err?.message?.match(/{.*}/)
-
-                    // if(err?.message?.includes(`{"isValid":false,"success":false}`)){
-                    if(match){
+                    if (match) {
 
                         errorResponse(res, httpCode, JSON.parse(match[0]));
-                        // errorResponse(res, httpCode, err.message);
                         return;
 
                     }
@@ -69,15 +67,70 @@ export const clauseInclusionVerification = async(req: FastifyRequest, res: Fasti
             })
         })
 
-        successResponse(res,200,response as VerifyClauseInclusionResponse);
-        
+        successResponse(res, 200, response as VerifyClauseInclusionResponse);
+
     } catch (error) {
 
         console.log(error);
 
-        errorResponse(res, 500,"Internal Server Error");
+        errorResponse(res, 500, "Internal Server Error");
         return;
-        
+
+    }
+
+}
+
+export const bgExpiryCheckVerification = async (req: FastifyRequest, res: FastifyReply) => {
+
+    try {
+
+        const { NDays, POEndDate, bgExpiry, bgExpiryHash } = req.body as BGExpiryCheckRequest;
+
+        if (!NDays || !POEndDate || !bgExpiry || !bgExpiryHash) {
+
+            errorResponse(res, 400, "please provide NDays,POEndDate,bgExpiry,bgExpiryHash");
+            return;
+
+        }
+
+        const response = await new Promise((resolve, reject) => {
+
+            zkpVerificationClient.BGExpiryCheck({ NDays, POEndDate, bgExpiry, bgExpiryHash }, (err: grpc.ServiceError, success: BGExpiryCheckResponse) => {
+
+                if (err) {
+
+                    const httpCode = getGrpcToHttpStatus(err.code);
+
+                    const match = err?.message?.match(/{.*}/)
+                    if (match) {
+
+                        errorResponse(res, httpCode, JSON.parse(match[0]));
+                        return;
+
+                    }
+
+                    errorResponse(res, httpCode, err.message);
+                    reject(err);
+                    return
+
+                }
+
+                console.log(`The data getting from microservice is from console is`, success);
+                resolve(success);
+
+
+            })
+
+            successResponse(res,200,response as BGExpiryCheckResponse);
+
+        })
+
+    } catch (error) {
+
+        console.log(error);
+
+        errorResponse(res, 500, "Internal Server Error");
+
     }
 
 }
