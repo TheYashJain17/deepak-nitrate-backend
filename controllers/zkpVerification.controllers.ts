@@ -141,7 +141,7 @@ export const amountWithinRangeVerification = async (req: FastifyRequest, res: Fa
 
         const { invoiceTotal, poBalance, poBalanceHash } = req.body as AmountWithinRangeRequest;
 
-        if (!invoiceTotal || !poBalance || poBalanceHash) {
+        if (!invoiceTotal || !poBalance || !poBalanceHash) {
 
             errorResponse(res, 400, "please provide invoiceTotal, poBalance, poBalanceHash");
             return;
