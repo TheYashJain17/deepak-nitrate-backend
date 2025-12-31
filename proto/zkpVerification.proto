@@ -5,6 +5,7 @@ service ZKPVerificationService{
 
     rpc VerifyClauseInclusion(VerifyClauseInclusionRequest) returns (VerifyClauseInclusionResponse);
     rpc BGExpiryCheck(BGExpiryCheckRequest) returns (BGExpiryCheckResponse);
+    rpc AmountWithinRange(AmountWithinRangeRequest) returns(AmountWithinRangeResponse);
 
 }
 
@@ -39,6 +40,22 @@ message BGExpiryCheckResponse{
     string message = 2;
     bool isValid = 3;
 
+
+}
+
+message AmountWithinRangeRequest{
+
+    string invoiceTotal = 1;
+    string poBalance = 2;
+    string poBalanceHash = 3;
+
+}
+
+message AmountWithinRangeResponse{
+
+    bool success = 1;
+    string message = 2;
+    bool isValid = 3;
 
 }
 
