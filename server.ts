@@ -33,6 +33,6 @@ server.bindAsync("0.0.0.0:50051", grpc.ServerCredentials.createInsecure(), (err,
 
     }
 
-    console.log(`Clause Inclusion Server Is Listening On ${port}`);
+    console.log(`ZKP Verification Server Is Listening On ${port}`);
 
 })
