@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import errorResponse from "../src/utils/responses/error.response";
-import { BGExpiryCheckRequest, BGExpiryCheckResponse, VerifyClauseInclusionRequest, VerifyClauseInclusionResponse } from "../types/zkpVerification.types";
+import { AmountWithinRangeRequest, AmountWithinRangeResponse, BGExpiryCheckRequest, BGExpiryCheckResponse, VerifyClauseInclusionRequest, VerifyClauseInclusionResponse } from "../types/zkpVerification.types";
 import zkpVerificationClient from "../src/grpc/clients/zkpVerification.client";
 import grpc from "@grpc/grpc-js";
 import { getGrpcToHttpStatus } from "../src/utils/utilities/getHTTPStatusCode";
@@ -122,8 +122,63 @@ export const bgExpiryCheckVerification = async (req: FastifyRequest, res: Fastif
             })
         })
 
-            successResponse(res,200,response as BGExpiryCheckResponse);
+        successResponse(res, 200, response as BGExpiryCheckResponse);
 
+
+    } catch (error) {
+
+        console.log(error);
+
+        errorResponse(res, 500, "Internal Server Error");
+
+    }
+
+}
+
+export const amountWithinRangeVerification = async (req: FastifyRequest, res: FastifyReply) => {
+
+    try {
+
+        const { invoiceTotal, poBalance, poBalanceHash } = req.body as AmountWithinRangeRequest;
+
+        if (!invoiceTotal || !poBalance || poBalanceHash) {
+
+            errorResponse(res, 400, "please provide invoiceTotal, poBalance, poBalanceHash");
+            return;
+
+        }
+
+        const response = await new Promise((resolve, reject) => {
+
+            zkpVerificationClient.AmountWithinRange({ invoiceTotal, poBalance, poBalanceHash }, (err: grpc.ServiceError, success: AmountWithinRangeResponse) => {
+
+                if (err) {
+
+                    const httpCode = getGrpcToHttpStatus(err.code);
+
+                    const match = err?.message?.match(/{.*}/)
+                    if (match) {
+
+                        errorResponse(res, httpCode, JSON.parse(match[0]));
+                        return;
+
+                    }
+
+                    errorResponse(res, httpCode, err.message);
+                    reject(err);
+                    return
+
+                }
+
+                console.log(`The data getting from microservice is from console is`, success);
+                resolve(success);
+
+
+            })
+
+        })
+
+        successResponse(res,200,response as AmountWithinRangeResponse);
 
     } catch (error) {
 
