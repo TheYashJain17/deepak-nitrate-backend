@@ -120,10 +120,10 @@ export const bgExpiryCheckVerification = async (req: FastifyRequest, res: Fastif
 
 
             })
+        })
 
             successResponse(res,200,response as BGExpiryCheckResponse);
 
-        })
 
     } catch (error) {
 
