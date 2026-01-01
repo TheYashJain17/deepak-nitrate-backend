@@ -7,7 +7,6 @@ import { getGrpcToHttpStatus } from "../src/utils/utilities/getHTTPStatusCode";
 import successResponse from "../src/utils/responses/success.response";
 
 export const healthRoute = async (req: FastifyRequest, res: FastifyReply) => {
-    []
 
     try {
 
