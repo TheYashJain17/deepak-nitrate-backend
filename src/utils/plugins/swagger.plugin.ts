@@ -20,7 +20,7 @@ export default fp(async (fastify: FastifyInstance) => {
 
                 {
 
-                    url: "http://localhost:8002",
+                    url: "http://localhost:8000",
 
                 },
 

@@ -23,6 +23,10 @@ import {
     clauseInclusionVerification,
     healthRoute,
 } from "../../controllers/zkpVerification.controllers.js";
+import { ErrorResponse, SuccessResponse } from "../schemas/shared/response.schema.js";
+import { ClauseInclusionBody } from "../schemas/zkp/clauseInclusion.schema.js";
+import { BGExpiryCheckBody } from "../schemas/zkp/bgExpiryCheck.schema.js";
+import { AmountWithinRangeBody } from "../schemas/zkp/amountWithinRange.schema.js";
 
 const zkpVerificationRoutes = async (fastify: FastifyInstance) => {
 
@@ -34,22 +38,8 @@ const zkpVerificationRoutes = async (fastify: FastifyInstance) => {
                 tags: ["Health"],
                 summary: "Health check endpoint",
                 response: {
-                    200: {
-                        type: "object",
-                        properties: {
-                            message: { type: "string" },
-                            success: { type: "boolean" },
-                            data: { type: "string" },
-                        },
-                    },
-                    500: {
-                        type: "object",
-                        properties: {
-                            message: { type: "string" },
-                            success: { type: "boolean" },
-                            data: { type: "string" },
-                        },
-                    },
+                    200: SuccessResponse,
+                    500: ErrorResponse
                 },
             },
         },
@@ -63,46 +53,11 @@ const zkpVerificationRoutes = async (fastify: FastifyInstance) => {
             schema: {
                 tags: ["ZKP Verification"],
                 summary: "Verify clause inclusion using ZKP",
-                body: {
-                    type: "object",
-                    required: ["agreementId", "clauseSetHash", "commitment"],
-                    properties: {
-                        agreementId: { type: "string" },
-                        clauseSetHash: { type: "string" },
-                        commitment: { type: "string" },
-                    },
-                },
+                body: ClauseInclusionBody,
                 response: {
-                    200: {
-                        type: "object",
-                        properties: {
-                            message: { type: "string" },
-                            success: { type: "boolean" },
-                            data: {
-                                type: "object",
-                                additionalProperties: true,
-                            },
-                        },
-                    },
-                    400: {
-                        type: "object",
-                        properties: {
-                            message: { type: "string" },
-                            success: { type: "boolean" },
-                            data: { type: "string" },
-                        },
-                    },
-                    500: {
-                        type: "object",
-                        properties: {
-                            message: { type: "string" },
-                            success: { type: "boolean" },
-                            data: {
-                                type: "object",
-                                additionalProperties: true,
-                            },
-                        },
-                    },
+                    200: SuccessResponse,
+                    400: ErrorResponse,
+                    500: ErrorResponse
                 },
             },
         },
@@ -116,44 +71,11 @@ const zkpVerificationRoutes = async (fastify: FastifyInstance) => {
             schema: {
                 tags: ["ZKP Verification"],
                 summary: "Verify BG expiry using ZKP",
-                body: {
-                    type: "object",
-                    required: ["NDays", "POEndDate", "bgExpiry", "bgExpiryHash"],
-                    properties: {
-                        NDays: { type: "string" },
-                        POEndDate: { type: "string" },
-                        bgExpiry: { type: "string" },
-                        bgExpiryHash: { type: "string" },
-                    },
-                },
+                body: BGExpiryCheckBody,
                 response: {
-                    200: {
-                        type: "object",
-                        properties: {
-                            message: { type: "string" },
-                            success: { type: "boolean" },
-                            data: {
-                                type: "object",
-                                additionalProperties: true,
-                            },
-                        },
-                    },
-                    400: {
-                        type: "object",
-                        properties: {
-                            message: { type: "string" },
-                            success: { type: "boolean" },
-                            data: { type: "string" },
-                        },
-                    },
-                    500: {
-                        type: "object",
-                        properties: {
-                            message: { type: "string" },
-                            success: { type: "boolean" },
-                            data: { type: "object", additionalProperties: true },
-                        },
-                    },
+                    200: SuccessResponse,
+                    400: ErrorResponse,
+                    500: ErrorResponse,
                 },
             },
         },
@@ -166,43 +88,11 @@ const zkpVerificationRoutes = async (fastify: FastifyInstance) => {
             schema: {
                 tags: ["ZKP Verification"],
                 summary: "Verify amount is within allowed range using ZKP",
-                body: {
-                    type: "object",
-                    required: ["invoiceTotal", "poBalance", "poBalanceHash"],
-                    properties: {
-                        invoiceTotal: { type: "string" },
-                        poBalance: { type: "string" },
-                        poBalanceHash: { type: "string" },
-                    },
-                },
+                body: AmountWithinRangeBody,
                 response: {
-                    200: {
-                        type: "object",
-                        properties: {
-                            message: { type: "string" },
-                            success: { type: "boolean" },
-                            data: {
-                                type: "object",
-                                additionalProperties: true,
-                            },
-                        },
-                    },
-                    400: {
-                        type: "object",
-                        properties: {
-                            message: { type: "string" },
-                            success: { type: "boolean" },
-                            data: { type: "string" },
-                        },
-                    },
-                    500: {
-                        type: "object",
-                        properties: {
-                            message: { type: "string" },
-                            success: { type: "boolean" },
-                            data: { type: "object", additionalProperties: true },
-                        },
-                    },
+                    200: SuccessResponse,
+                    400: ErrorResponse,
+                    500: ErrorResponse
                 },
             },
         },
