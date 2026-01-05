@@ -1,4 +1,4 @@
-import { ZKPErrorType } from "../../types/types";
+import { ZKPErrorType } from "../../types/types.js";
 
 const normalizeZkpError = (error: unknown): ZKPErrorType => {
 

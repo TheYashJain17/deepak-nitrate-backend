@@ -1,6 +1,5 @@
-import {ethers} from "ethers";
-import {config} from "dotenv";
-import { clauseInclusionAbi } from "../ABIs/clauseInclusion.abi";
+import { config } from "dotenv";
+import { ethers } from "ethers";
 
 config({quiet: true});
 

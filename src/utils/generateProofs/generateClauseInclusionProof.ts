@@ -1,6 +1,6 @@
 import * as snarkjs from "snarkjs";
-import { GenerateProofType, ZKPErrorType } from "../../types/types";
-import normalizeZkpError from "../utilities/normaliseZKPError";
+import { GenerateProofType, ZKPErrorType } from "../../types/types.js";
+import normalizeZkpError from "../utilities/normaliseZKPError.js";
 
 const generateClauseInclusionProof = async (inputs: { agreementId: string, clauseSetHash: string, commitment: string }, WASM_PATH: string, ZKEY_PATH: string): Promise<GenerateProofType | void> => {
 

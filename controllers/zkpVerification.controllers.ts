@@ -1,17 +1,17 @@
-import { Status } from "@grpc/grpc-js/build/src/constants";
-import { AmountWithinRangeRequest, BGExpiryCheckRequest, VerifyClauseInclusionRequest, ZKPVerificationServiceServer } from "../src/protoOutput/zkpVerification";
-import getContractInstance from "../src/utils/utilities/getContractInstance";
+import { Status } from "@grpc/grpc-js/build/src/constants.js";
+import { AmountWithinRangeRequest, BGExpiryCheckRequest, VerifyClauseInclusionRequest, ZKPVerificationServiceServer } from "../src/protoOutput/zkpVerification.js";
+import getContractInstance from "../src/utils/utilities/getContractInstance.js";
 
 import path from "path";
-import { GenerateProofType, ZKPErrorType } from "../src/types/types";
+import { GenerateProofType, ZKPErrorType } from "../src/types/types.js";
 
 
-import { clauseInclusionAbi } from "../src/utils/ABIs/clauseInclusion.abi";
-import generateClauseInclusionProof from "../src/utils/generateProofs/generateClauseInclusionProof";
-import generateBGExpiryCheckProof from "../src/utils/generateProofs/generateBGExpiryCheckProof";
-import { BGExpiryAbi } from "../src/utils/ABIs/bgExpiryCheck.abi";
-import generateAmountWithinRangeProof from "../src/utils/generateProofs/generateAmountWithinRangeProof";
-import { AmountWithinRangeAbi } from "../src/utils/ABIs/amountWithinRange.abi";
+import { clauseInclusionAbi } from "../src/utils/ABIs/clauseInclusion.abi.js";
+import generateClauseInclusionProof from "../src/utils/generateProofs/generateClauseInclusionProof.js";
+import generateBGExpiryCheckProof from "../src/utils/generateProofs/generateBGExpiryCheckProof.js";
+import { BGExpiryAbi } from "../src/utils/ABIs/bgExpiryCheck.abi.js";
+import generateAmountWithinRangeProof from "../src/utils/generateProofs/generateAmountWithinRangeProof.js";
+import { AmountWithinRangeAbi } from "../src/utils/ABIs/amountWithinRange.abi.js";
 
 
 const isZKPError = (error: unknown): error is ZKPErrorType => {

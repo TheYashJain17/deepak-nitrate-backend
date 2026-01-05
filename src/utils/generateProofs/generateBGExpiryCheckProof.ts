@@ -1,6 +1,6 @@
 import * as snarkjs from "snarkjs";
-import { GenerateProofType } from "../../types/types";
-import normalizeZkpError from "../utilities/normaliseZKPError";
+import { GenerateProofType } from "../../types/types.js";
+import normalizeZkpError from "../utilities/normaliseZKPError.js";
 
 
 
