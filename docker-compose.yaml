@@ -9,8 +9,8 @@ services:
       - "50051:50051"
     restart: unless-stopped
     networks:
-      - backend-network
+      - microservices-net
 
 networks:
-  backend-network:
-    driver: bridge
+  microservices-net:
+    external: true
