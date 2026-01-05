@@ -22,7 +22,7 @@ import {
     bgExpiryCheckVerification,
     clauseInclusionVerification,
     healthRoute,
-} from "../../controllers/zkpVerification.controllers";
+} from "../../controllers/zkpVerification.controllers.js";
 
 const zkpVerificationRoutes = async (fastify: FastifyInstance) => {
 

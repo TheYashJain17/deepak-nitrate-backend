@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import errorResponse from "../src/utils/responses/error.response";
-import { AmountWithinRangeRequest, AmountWithinRangeResponse, BGExpiryCheckRequest, BGExpiryCheckResponse, VerifyClauseInclusionRequest, VerifyClauseInclusionResponse } from "../types/zkpVerification.types";
-import zkpVerificationClient from "../src/grpc/clients/zkpVerification.client";
+import errorResponse from "../src/utils/responses/error.response.js";
+import { AmountWithinRangeRequest, AmountWithinRangeResponse, BGExpiryCheckRequest, BGExpiryCheckResponse, VerifyClauseInclusionRequest, VerifyClauseInclusionResponse } from "../types/zkpVerification.types.js";
+import zkpVerificationClient from "../src/grpc/clients/zkpVerification.client.js";
 import grpc from "@grpc/grpc-js";
-import { getGrpcToHttpStatus } from "../src/utils/utilities/getHTTPStatusCode";
-import successResponse from "../src/utils/responses/success.response";
+import { getGrpcToHttpStatus } from "../src/utils/utilities/getHTTPStatusCode.js";
+import successResponse from "../src/utils/responses/success.response.js";
 
 export const healthRoute = async (req: FastifyRequest, res: FastifyReply) => {
 
