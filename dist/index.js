@@ -2,7 +2,7 @@ import Fastify from "./src/app.js";
 import { config } from "dotenv";
 config({ quiet: true });
 const port = Number(process.env.PORT) || 8000;
-Fastify.listen({ port }, (err, address) => {
+Fastify.listen({ port, host: "0.0.0.0" }, (err, address) => {
     if (err) {
         Fastify.log.error(err);
         process.exit(1);
