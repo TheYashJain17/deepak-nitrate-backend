@@ -13,3 +13,6 @@ start:
 build:
 	$(PNPM) run build
 
+docker:
+	sudo docker compose down && sudo docker compose up --build
+
