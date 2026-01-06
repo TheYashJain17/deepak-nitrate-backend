@@ -1,0 +1,72 @@
+syntax = "proto3";
+package zkpVerification;
+
+service ZKPVerificationService{
+
+    rpc VerifyClauseInclusion(VerifyClauseInclusionRequest) returns (VerifyClauseInclusionResponse);
+    rpc BGExpiryCheck(BGExpiryCheckRequest) returns (BGExpiryCheckResponse);
+    rpc AmountWithinRange(AmountWithinRangeRequest) returns(AmountWithinRangeResponse);
+
+}
+
+message VerifyClauseInclusionRequest{
+
+    string agreementId = 1;
+    string clauseSetHash = 2;
+    string commitment = 3;
+
+}
+
+message VerifyClauseInclusionResponse{
+
+    bool success = 1;
+    string message = 2;
+    bool isValid = 3;
+
+}
+
+message BGExpiryCheckRequest{
+
+    string bgExpiry = 1; 
+    string POEndDate = 2;
+    string NDays = 3;
+    string bgExpiryHash = 4; 
+
+}
+
+message BGExpiryCheckResponse{
+
+    bool success = 1;
+    string message = 2;
+    bool isValid = 3;
+
+
+}
+
+message AmountWithinRangeRequest{
+
+    string invoiceTotal = 1;
+    string poBalance = 2;
+    string poBalanceHash = 3;
+
+}
+
+message AmountWithinRangeResponse{
+
+    bool success = 1;
+    string message = 2;
+    bool isValid = 3;
+
+}
+
+
+
+/*
+
+protoc \
+  -I ${PWD}/proto \
+  --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts_proto \
+  --ts_out="esModuleInterop=true,outputServices=grpc-js,outputClientImpl=true,forceLong=false,useOptionals=true:${PWD}/src/protoOutput" \
+  ${PWD}/proto/zkpVerification.proto
+
+*/
