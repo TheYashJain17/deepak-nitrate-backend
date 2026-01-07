@@ -24,9 +24,10 @@ RUN corepack enable
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/proto ./proto
+COPY --from=build /app/src/utils/circomFiles ./circomFiles
 COPY package.json ./
 
 
-EXPOSE 50051
+EXPOSE 50055
 
 CMD ["node", "dist/server.js"]
