@@ -5,7 +5,8 @@ import { fileURLToPath } from "url";
 import { ZKPVerificationServiceHandlers } from "./controllers/zkpVerification.controllers.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const PROTO_PATH = path.join(__dirname, "../proto/zkpVerification.proto");
+// const PROTO_PATH = path.join(__dirname, "./proto/zkpVerification.proto"); //this is for local 
+const PROTO_PATH = path.join(__dirname, "../proto/zkpVerification.proto"); //this is for prod , use this before doing the build thing
 const packageDef = protoLoader.loadSync(PROTO_PATH);
 const grpcObj = grpc.loadPackageDefinition(packageDef);
 const zkpVerificationPackage = grpcObj.zkpVerification;
