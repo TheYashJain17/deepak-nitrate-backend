@@ -20,7 +20,7 @@ export default fp((fastify) => __awaiter(void 0, void 0, void 0, function* () {
             },
             servers: [
                 {
-                    url: "http://localhost:8000",
+                    url: "http://localhost:9009",
                 },
             ],
         },

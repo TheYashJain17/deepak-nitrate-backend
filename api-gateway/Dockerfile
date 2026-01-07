@@ -27,6 +27,6 @@ COPY --from=build /app/src/grpc/proto ./proto
 COPY package.json ./
 
 
-EXPOSE 8002
+EXPOSE 9009
 
 CMD ["node", "dist/index.js"]
