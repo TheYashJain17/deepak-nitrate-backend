@@ -11,8 +11,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-// const PROTO_PATH = path.join(__dirname, "./proto/zkpVerification.proto"); //this is for local 
-const PROTO_PATH = path.join(__dirname, "../proto/zkpVerification.proto"); //this is for prod , use this before doing the build thing means for docker
+const PROTO_PATH = path.join(__dirname, "./proto/zkpVerification.proto"); //this is for local 
+// const PROTO_PATH = path.join(__dirname, "../proto/zkpVerification.proto"); //this is for prod , use this before doing the build thing means for docker
 
 const packageDef = protoLoader.loadSync(PROTO_PATH);
 

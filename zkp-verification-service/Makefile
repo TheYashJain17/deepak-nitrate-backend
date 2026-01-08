@@ -1,8 +1,10 @@
 NODE = node 
 PNPM = pnpm 
 
-.PHONY: start dev build docker 
+.PHONY: install start dev build docker 
 
+install:
+	$(PNPM) install
 
 start:
 	$(PNPM) start

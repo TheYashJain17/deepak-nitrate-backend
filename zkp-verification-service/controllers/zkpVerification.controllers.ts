@@ -37,13 +37,13 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
         let isProofValid: boolean;
 
         //This is for prod means for docker
-        const WASM_PATH: string = path.resolve(__dirname, "../../circomFiles/clauseInclusion/clauseInclusion.wasm");
-        const ZKEY_PATH: string = path.resolve(__dirname, "../../circomFiles/clauseInclusion/clauseInclusion_final.zkey");
+        // const WASM_PATH: string = path.resolve(__dirname, "../../circomFiles/clauseInclusion/clauseInclusion.wasm");
+        // const ZKEY_PATH: string = path.resolve(__dirname, "../../circomFiles/clauseInclusion/clauseInclusion_final.zkey");
 
 
         //this is for local
-        // const WASM_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/clauseInclusion/clauseInclusion.wasm");
-        // const ZKEY_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/clauseInclusion/clauseInclusion_final.zkey");
+        const WASM_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/clauseInclusion/clauseInclusion.wasm");
+        const ZKEY_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/clauseInclusion/clauseInclusion_final.zkey");
         try {
 
             const { agreementId, clauseSetHash, commitment } = call.request as VerifyClauseInclusionRequest;
@@ -102,12 +102,12 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
         let isProofValid: boolean;
 
         //This is for prod means docker
-        const WASM_PATH: string = path.resolve(__dirname, "../../circomFiles/bgExpiryCheck/bgExpiryCheck.wasm");
-        const ZKEY_PATH: string = path.resolve(__dirname, "../../circomFiles/bgExpiryCheck/bgExpiryCheck_final.zkey");
+        // const WASM_PATH: string = path.resolve(__dirname, "../../circomFiles/bgExpiryCheck/bgExpiryCheck.wasm");
+        // const ZKEY_PATH: string = path.resolve(__dirname, "../../circomFiles/bgExpiryCheck/bgExpiryCheck_final.zkey");
 
         // This is for local
-        // const WASM_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/bgExpiryCheck/bgExpiryCheck.wasm");
-        // const ZKEY_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/bgExpiryCheck/bgExpiryCheck_final.zkey");
+        const WASM_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/bgExpiryCheck/bgExpiryCheck.wasm");
+        const ZKEY_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/bgExpiryCheck/bgExpiryCheck_final.zkey");
 
 
         try {
@@ -164,12 +164,12 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
         let isProofValid: boolean;
 
         //This is for prod means docker
-        const WASM_PATH: string = path.resolve(__dirname, "../../circomFiles/amountWithinRange/amountWithinRange.wasm");
-        const ZKEY_PATH: string = path.resolve(__dirname, "../../circomFiles/amountWithinRange/amountWithinRange_final.zkey");
+        // const WASM_PATH: string = path.resolve(__dirname, "../../circomFiles/amountWithinRange/amountWithinRange.wasm");
+        // const ZKEY_PATH: string = path.resolve(__dirname, "../../circomFiles/amountWithinRange/amountWithinRange_final.zkey");
 
         //This is for local
-        // const WASM_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/amountWithinRange/amountWithinRange.wasm");
-        // const ZKEY_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/amountWithinRange/amountWithinRange_final.zkey");
+        const WASM_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/amountWithinRange/amountWithinRange.wasm");
+        const ZKEY_PATH: string = path.join(process.cwd(), "src/utils/circomFiles/amountWithinRange/amountWithinRange_final.zkey");
 
         try {
 
