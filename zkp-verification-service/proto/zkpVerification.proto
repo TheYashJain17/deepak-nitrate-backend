@@ -12,8 +12,8 @@ service ZKPVerificationService{
 
 message AddClauseInclusionCommitmentRequest{
 
-    string bgId = 1;
-    string bgExpiry = 2;
+    string agreementId = 1;
+    string clauseSetHash = 2;
 
 }
 

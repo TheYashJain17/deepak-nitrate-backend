@@ -22,8 +22,8 @@ import {
 export const protobufPackage = "zkpVerification";
 
 export interface AddClauseInclusionCommitmentRequest {
-  bgId: string;
-  bgExpiry: string;
+  agreementId: string;
+  clauseSetHash: string;
 }
 
 export interface AddClauseInclusionCommitmentResponse {
@@ -71,16 +71,16 @@ export interface AmountWithinRangeResponse {
 }
 
 function createBaseAddClauseInclusionCommitmentRequest(): AddClauseInclusionCommitmentRequest {
-  return { bgId: "", bgExpiry: "" };
+  return { agreementId: "", clauseSetHash: "" };
 }
 
 export const AddClauseInclusionCommitmentRequest: MessageFns<AddClauseInclusionCommitmentRequest> = {
   encode(message: AddClauseInclusionCommitmentRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.bgId !== "") {
-      writer.uint32(10).string(message.bgId);
+    if (message.agreementId !== "") {
+      writer.uint32(10).string(message.agreementId);
     }
-    if (message.bgExpiry !== "") {
-      writer.uint32(18).string(message.bgExpiry);
+    if (message.clauseSetHash !== "") {
+      writer.uint32(18).string(message.clauseSetHash);
     }
     return writer;
   },
@@ -97,7 +97,7 @@ export const AddClauseInclusionCommitmentRequest: MessageFns<AddClauseInclusionC
             break;
           }
 
-          message.bgId = reader.string();
+          message.agreementId = reader.string();
           continue;
         }
         case 2: {
@@ -105,7 +105,7 @@ export const AddClauseInclusionCommitmentRequest: MessageFns<AddClauseInclusionC
             break;
           }
 
-          message.bgExpiry = reader.string();
+          message.clauseSetHash = reader.string();
           continue;
         }
       }
@@ -119,18 +119,18 @@ export const AddClauseInclusionCommitmentRequest: MessageFns<AddClauseInclusionC
 
   fromJSON(object: any): AddClauseInclusionCommitmentRequest {
     return {
-      bgId: isSet(object.bgId) ? globalThis.String(object.bgId) : "",
-      bgExpiry: isSet(object.bgExpiry) ? globalThis.String(object.bgExpiry) : "",
+      agreementId: isSet(object.agreementId) ? globalThis.String(object.agreementId) : "",
+      clauseSetHash: isSet(object.clauseSetHash) ? globalThis.String(object.clauseSetHash) : "",
     };
   },
 
   toJSON(message: AddClauseInclusionCommitmentRequest): unknown {
     const obj: any = {};
-    if (message.bgId !== "") {
-      obj.bgId = message.bgId;
+    if (message.agreementId !== "") {
+      obj.agreementId = message.agreementId;
     }
-    if (message.bgExpiry !== "") {
-      obj.bgExpiry = message.bgExpiry;
+    if (message.clauseSetHash !== "") {
+      obj.clauseSetHash = message.clauseSetHash;
     }
     return obj;
   },
@@ -144,8 +144,8 @@ export const AddClauseInclusionCommitmentRequest: MessageFns<AddClauseInclusionC
     object: I,
   ): AddClauseInclusionCommitmentRequest {
     const message = createBaseAddClauseInclusionCommitmentRequest();
-    message.bgId = object.bgId ?? "";
-    message.bgExpiry = object.bgExpiry ?? "";
+    message.agreementId = object.agreementId ?? "";
+    message.clauseSetHash = object.clauseSetHash ?? "";
     return message;
   },
 };

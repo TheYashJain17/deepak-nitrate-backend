@@ -45,16 +45,16 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
 
         try {
 
-            const { bgExpiry, bgId } = call.request as AddClauseInclusionCommitmentRequest;
+            const { agreementId,clauseSetHash } = call.request as AddClauseInclusionCommitmentRequest;
 
-            if (!bgExpiry || !bgId) {
+            if (!clauseSetHash || !agreementId) {
 
                 callback({ code: Status.INVALID_ARGUMENT, message: "please provide bgExpriry, bgId" });
                 return;
 
             }
 
-            const data = {bgExpiry};
+            const data = {clauseSetHash};
 
             const bytes32Value = await getCommitmentHash(data) as string;
 
@@ -63,7 +63,7 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
 
             const contract = await getContractInstance(clauseInclusionAddress as string, clauseInclusionAbi);
 
-            const tx = await contract.registerBG(bgId, bytes32Value);
+            const tx = await contract.registerBG(agreementId, bytes32Value);
 
             console.log("The transaction hash we are getting is", tx?.hash);
 
