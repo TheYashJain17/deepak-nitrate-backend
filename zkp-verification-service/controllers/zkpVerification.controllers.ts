@@ -1,5 +1,5 @@
 import { Status } from "@grpc/grpc-js/build/src/constants.js";
-import { AmountWithinRangeRequest, BGExpiryCheckRequest, VerifyClauseInclusionRequest, ZKPVerificationServiceServer } from "../src/protoOutput/zkpVerification.js";
+import { AddClauseInclusionCommitmentRequest, AmountWithinRangeRequest, BGExpiryCheckRequest, VerifyClauseInclusionRequest, ZKPVerificationServiceServer } from "../src/protoOutput/zkpVerification.js";
 import getContractInstance from "../src/utils/utilities/getContractInstance.js";
 
 import path from "path";
@@ -19,6 +19,14 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
+const {
+
+    CLAUSE_INCLUSION_CONTRACT_ADDRESS: clauseInclusionAddress, 
+    BG_EXPIRY_CHECK_CONTRACT_ADDRESS: bgExpiryAddress,
+    AMOUNT_WITHIN_RANGE_CONTRACT_ADDRESS: amountWithinRangeAddress
+
+} = process.env;
+
 const isZKPError = (error: unknown): error is ZKPErrorType => {
     return (
         typeof error === "object" &&
@@ -31,6 +39,8 @@ const isZKPError = (error: unknown): error is ZKPErrorType => {
 
 
 export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
+
+
 
     async verifyClauseInclusion(call, callback) {
 
@@ -70,7 +80,7 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
             console.log("input signals", inputSignals)
 
 
-            const contract = await getContractInstance(process.env.CLAUSE_INCLUSION_CONTRACT_ADDRESS as string, clauseInclusionAbi);
+            const contract = await getContractInstance(clauseInclusionAddress as string, clauseInclusionAbi);
 
             isProofValid = await contract.verifyClauseInclusionCommitment(agreementId, A, B, C, inputSignals);
 
@@ -132,7 +142,7 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
 
             console.log("The public signals we are getting is ", inputSignals);
 
-            const contract = await getContractInstance(process.env.BG_EXPIRY_CHECK_CONTRACT_ADDRESS as string, BGExpiryAbi);
+            const contract = await getContractInstance(bgExpiryAddress  as string, BGExpiryAbi);
 
             isProofValid = await contract.verifyBG(A, B, C, inputSignals);
 
@@ -194,7 +204,7 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
 
             console.log("The public signals we are getting is ", inputSignals);
 
-            const contract = await getContractInstance(process.env.AMOUNT_WITHIN_RANGE_CONTRACT_ADDRESS as string, AmountWithinRangeAbi);
+            const contract = await getContractInstance(amountWithinRangeAddress as string, AmountWithinRangeAbi);
 
 
             isProofValid = await contract.verifyAmoutWithinRangeCommitment(A, B, C, inputSignals);
