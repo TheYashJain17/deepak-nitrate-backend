@@ -1,10 +1,11 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import errorResponse from "../src/utils/responses/error.response.js";
-import { AmountWithinRangeRequest, AmountWithinRangeResponse, BGExpiryCheckRequest, BGExpiryCheckResponse, VerifyClauseInclusionRequest, VerifyClauseInclusionResponse } from "../types/zkpVerification.types.js";
+import { AddClauseInclusionCommitmentRequest, AddClauseInclusionCommitmentResponse, AmountWithinRangeRequest, AmountWithinRangeResponse, BGExpiryCheckRequest, BGExpiryCheckResponse, VerifyClauseInclusionRequest, VerifyClauseInclusionResponse } from "../types/zkpVerification.types.js";
 import zkpVerificationClient from "../src/grpc/clients/zkpVerification.client.js";
 import grpc from "@grpc/grpc-js";
 import { getGrpcToHttpStatus } from "../src/utils/utilities/getHTTPStatusCode.js";
 import successResponse from "../src/utils/responses/success.response.js";
+import Fastify from "../src/app.js";
 
 export const healthRoute = async (req: FastifyRequest, res: FastifyReply) => {
 
@@ -20,6 +21,62 @@ export const healthRoute = async (req: FastifyRequest, res: FastifyReply) => {
 
         return;
 
+    }
+
+}
+
+export const addClauseInclusionCommitment = async(req: FastifyRequest, res: FastifyReply) => {
+
+    try {
+
+        const {agreementId, clauseSetHash} = req.body as AddClauseInclusionCommitmentRequest;
+
+        if(!clauseSetHash || !agreementId){
+
+            errorResponse(res,400,"please provide clauseSetHash, agreementId");
+            return;
+
+        }
+
+
+        const response = await new Promise((resolve, reject) => {
+
+            zkpVerificationClient.AddClauseInclusionCommitment({agreementId, clauseSetHash}, (err: grpc.ServiceError, success: AddClauseInclusionCommitmentResponse) => {
+
+                if(err){
+
+                    const httpCode = getGrpcToHttpStatus(err.code);
+
+                    const match = err?.message?.match(/{.*}/)
+                    if (match) {
+
+                        errorResponse(res, httpCode, JSON.parse(match[0]));
+                        return;
+
+                    }
+
+                    errorResponse(res, httpCode, err.message);
+                    reject(err);
+                    return
+
+                }
+
+                Fastify.log.fatal(success);
+                resolve(success);
+
+            })
+
+        })
+
+        successResponse(res,201,response as AddClauseInclusionCommitmentResponse);
+
+
+    } catch (error) {
+
+        console.log(error);
+
+        errorResponse(res, 500, "Internal Server Error");
+        
     }
 
 }

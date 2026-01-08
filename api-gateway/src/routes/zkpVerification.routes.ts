@@ -18,6 +18,7 @@
 
 import { FastifyInstance } from "fastify";
 import {
+    addClauseInclusionCommitment,
     amountWithinRangeVerification,
     bgExpiryCheckVerification,
     clauseInclusionVerification,
@@ -46,6 +47,12 @@ const zkpVerificationRoutes = async (fastify: FastifyInstance) => {
         healthRoute
     );
 
+    fastify.post(
+
+        "/clauseInclusion/addCommitment",
+        addClauseInclusionCommitment
+
+    )
 
     fastify.post(
         "/clauseInclusion/verify",
