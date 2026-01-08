@@ -15,9 +15,9 @@ const PROTO_PATH = path.join(process.cwd(), "src/grpc/proto/zkpVerification.prot
 
 const packageDef = protoLoader.loadSync(PROTO_PATH);
 
-const clauseInclusionObj = grpc.loadPackageDefinition(packageDef) as any;
+const zkpObj = grpc.loadPackageDefinition(packageDef) as any;
 
-const clauseInclusionClient = new clauseInclusionObj.zkpVerification.ZKPVerificationService("0.0.0.0:50055", grpc.credentials.createInsecure()); //this is for local
-// const clauseInclusionClient = new clauseInclusionObj.zkpVerification.ZKPVerificationService("zkp-verification-service:50055", grpc.credentials.createInsecure()); //this is for prod means for docker
+const zkpVerificationClient = new zkpObj.zkpVerification.ZKPVerificationService("0.0.0.0:50055", grpc.credentials.createInsecure()); //this is for local
+// const zkpClient = new zkpObj.zkpVerification.ZKPVerificationService("zkp-verification-service:50055", grpc.credentials.createInsecure()); //this is for prod means for docker
 
-export default clauseInclusionClient;
+export default zkpVerificationClient;

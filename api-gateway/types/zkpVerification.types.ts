@@ -21,6 +21,18 @@ import {
 
 export const protobufPackage = "zkpVerification";
 
+export interface AddClauseInclusionCommitmentRequest {
+  bgId: string;
+  bgExpiry: string;
+}
+
+export interface AddClauseInclusionCommitmentResponse {
+  success: boolean;
+  message: string;
+  commitment: string;
+  txHash: string;
+}
+
 export interface VerifyClauseInclusionRequest {
   agreementId: string;
   clauseSetHash: string;
@@ -57,6 +69,198 @@ export interface AmountWithinRangeResponse {
   message: string;
   isValid: boolean;
 }
+
+function createBaseAddClauseInclusionCommitmentRequest(): AddClauseInclusionCommitmentRequest {
+  return { bgId: "", bgExpiry: "" };
+}
+
+export const AddClauseInclusionCommitmentRequest: MessageFns<AddClauseInclusionCommitmentRequest> = {
+  encode(message: AddClauseInclusionCommitmentRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.bgId !== "") {
+      writer.uint32(10).string(message.bgId);
+    }
+    if (message.bgExpiry !== "") {
+      writer.uint32(18).string(message.bgExpiry);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AddClauseInclusionCommitmentRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAddClauseInclusionCommitmentRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.bgId = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.bgExpiry = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AddClauseInclusionCommitmentRequest {
+    return {
+      bgId: isSet(object.bgId) ? globalThis.String(object.bgId) : "",
+      bgExpiry: isSet(object.bgExpiry) ? globalThis.String(object.bgExpiry) : "",
+    };
+  },
+
+  toJSON(message: AddClauseInclusionCommitmentRequest): unknown {
+    const obj: any = {};
+    if (message.bgId !== "") {
+      obj.bgId = message.bgId;
+    }
+    if (message.bgExpiry !== "") {
+      obj.bgExpiry = message.bgExpiry;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<AddClauseInclusionCommitmentRequest>, I>>(
+    base?: I,
+  ): AddClauseInclusionCommitmentRequest {
+    return AddClauseInclusionCommitmentRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<AddClauseInclusionCommitmentRequest>, I>>(
+    object: I,
+  ): AddClauseInclusionCommitmentRequest {
+    const message = createBaseAddClauseInclusionCommitmentRequest();
+    message.bgId = object.bgId ?? "";
+    message.bgExpiry = object.bgExpiry ?? "";
+    return message;
+  },
+};
+
+function createBaseAddClauseInclusionCommitmentResponse(): AddClauseInclusionCommitmentResponse {
+  return { success: false, message: "", commitment: "", txHash: "" };
+}
+
+export const AddClauseInclusionCommitmentResponse: MessageFns<AddClauseInclusionCommitmentResponse> = {
+  encode(message: AddClauseInclusionCommitmentResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    if (message.commitment !== "") {
+      writer.uint32(26).string(message.commitment);
+    }
+    if (message.txHash !== "") {
+      writer.uint32(34).string(message.txHash);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AddClauseInclusionCommitmentResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAddClauseInclusionCommitmentResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.commitment = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.txHash = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AddClauseInclusionCommitmentResponse {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+      commitment: isSet(object.commitment) ? globalThis.String(object.commitment) : "",
+      txHash: isSet(object.txHash) ? globalThis.String(object.txHash) : "",
+    };
+  },
+
+  toJSON(message: AddClauseInclusionCommitmentResponse): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    if (message.commitment !== "") {
+      obj.commitment = message.commitment;
+    }
+    if (message.txHash !== "") {
+      obj.txHash = message.txHash;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<AddClauseInclusionCommitmentResponse>, I>>(
+    base?: I,
+  ): AddClauseInclusionCommitmentResponse {
+    return AddClauseInclusionCommitmentResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<AddClauseInclusionCommitmentResponse>, I>>(
+    object: I,
+  ): AddClauseInclusionCommitmentResponse {
+    const message = createBaseAddClauseInclusionCommitmentResponse();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
+    message.commitment = object.commitment ?? "";
+    message.txHash = object.txHash ?? "";
+    return message;
+  },
+};
 
 function createBaseVerifyClauseInclusionRequest(): VerifyClauseInclusionRequest {
   return { agreementId: "", clauseSetHash: "", commitment: "" };
@@ -630,6 +834,19 @@ export const AmountWithinRangeResponse: MessageFns<AmountWithinRangeResponse> = 
 
 export type ZKPVerificationServiceService = typeof ZKPVerificationServiceService;
 export const ZKPVerificationServiceService = {
+  addClauseInclusionCommitment: {
+    path: "/zkpVerification.ZKPVerificationService/AddClauseInclusionCommitment",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: AddClauseInclusionCommitmentRequest): Buffer =>
+      Buffer.from(AddClauseInclusionCommitmentRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): AddClauseInclusionCommitmentRequest =>
+      AddClauseInclusionCommitmentRequest.decode(value),
+    responseSerialize: (value: AddClauseInclusionCommitmentResponse): Buffer =>
+      Buffer.from(AddClauseInclusionCommitmentResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): AddClauseInclusionCommitmentResponse =>
+      AddClauseInclusionCommitmentResponse.decode(value),
+  },
   verifyClauseInclusion: {
     path: "/zkpVerification.ZKPVerificationService/VerifyClauseInclusion",
     requestStream: false,
@@ -665,12 +882,31 @@ export const ZKPVerificationServiceService = {
 } as const;
 
 export interface ZKPVerificationServiceServer extends UntypedServiceImplementation {
+  addClauseInclusionCommitment: handleUnaryCall<
+    AddClauseInclusionCommitmentRequest,
+    AddClauseInclusionCommitmentResponse
+  >;
   verifyClauseInclusion: handleUnaryCall<VerifyClauseInclusionRequest, VerifyClauseInclusionResponse>;
   bgExpiryCheck: handleUnaryCall<BGExpiryCheckRequest, BGExpiryCheckResponse>;
   amountWithinRange: handleUnaryCall<AmountWithinRangeRequest, AmountWithinRangeResponse>;
 }
 
 export interface ZKPVerificationServiceClient extends Client {
+  addClauseInclusionCommitment(
+    request: AddClauseInclusionCommitmentRequest,
+    callback: (error: ServiceError | null, response: AddClauseInclusionCommitmentResponse) => void,
+  ): ClientUnaryCall;
+  addClauseInclusionCommitment(
+    request: AddClauseInclusionCommitmentRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: AddClauseInclusionCommitmentResponse) => void,
+  ): ClientUnaryCall;
+  addClauseInclusionCommitment(
+    request: AddClauseInclusionCommitmentRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: AddClauseInclusionCommitmentResponse) => void,
+  ): ClientUnaryCall;
   verifyClauseInclusion(
     request: VerifyClauseInclusionRequest,
     callback: (error: ServiceError | null, response: VerifyClauseInclusionResponse) => void,

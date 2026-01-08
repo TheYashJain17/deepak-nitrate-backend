@@ -3,11 +3,29 @@ package zkpVerification;
 
 service ZKPVerificationService{
 
+    rpc AddClauseInclusionCommitment(AddClauseInclusionCommitmentRequest) returns (AddClauseInclusionCommitmentResponse);
     rpc VerifyClauseInclusion(VerifyClauseInclusionRequest) returns (VerifyClauseInclusionResponse);
     rpc BGExpiryCheck(BGExpiryCheckRequest) returns (BGExpiryCheckResponse);
     rpc AmountWithinRange(AmountWithinRangeRequest) returns(AmountWithinRangeResponse);
 
 }
+
+message AddClauseInclusionCommitmentRequest{
+
+    string bgId = 1;
+    string bgExpiry = 2;
+
+}
+
+message AddClauseInclusionCommitmentResponse{
+
+    bool success = 1;
+    string message = 2;
+    string commitment = 3;
+    string txHash = 4;
+
+}
+
 
 message VerifyClauseInclusionRequest{
 
