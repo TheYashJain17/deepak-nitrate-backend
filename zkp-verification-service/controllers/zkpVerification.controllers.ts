@@ -14,6 +14,7 @@ import generateAmountWithinRangeProof from "../src/utils/generateProofs/generate
 import { AmountWithinRangeAbi } from "../src/utils/ABIs/amountWithinRange.abi.js";
 
 import { fileURLToPath } from "node:url";
+import getCommitmentHash from "../src/utils/utilities/getCommitmentHash.js";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -40,7 +41,52 @@ const isZKPError = (error: unknown): error is ZKPErrorType => {
 
 export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
 
+    async addClauseInclusionCommitment(call, callback) {
 
+        try {
+
+            const { bgExpiry, bgId } = call.request as AddClauseInclusionCommitmentRequest;
+
+            if (!bgExpiry || !bgId) {
+
+                callback({ code: Status.INVALID_ARGUMENT, message: "please provide bgExpriry, bgId" });
+                return;
+
+            }
+
+            const data = {bgExpiry};
+
+            const bytes32Value = await getCommitmentHash(data) as string;
+
+
+            console.log("The commitment we are getting is ", bytes32Value);
+
+            const contract = await getContractInstance(clauseInclusionAddress as string, clauseInclusionAbi);
+
+            const tx = await contract.registerBG(bgId, bytes32Value);
+
+            console.log("The transaction hash we are getting is", tx?.hash);
+
+            if(!tx?.hash){
+
+                callback({code: Status.INTERNAL, message: "Failed to Add The Commitment Onchain"});
+                return;
+
+            }
+
+            callback(null,{success: true, message: "sucess", commitment: bytes32Value, txHash: tx?.hash});
+
+
+
+        } catch (error) {
+
+            console.log(error);
+
+            callback({ code: Status.INTERNAL, message: "Internal Server Error" });
+
+        }
+
+    },
 
     async verifyClauseInclusion(call, callback) {
 

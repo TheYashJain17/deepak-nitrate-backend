@@ -22,6 +22,7 @@ message AddClauseInclusionCommitmentResponse{
     bool success = 1;
     string message = 2;
     string commitment = 3;
+    string txHash = 4;
 
 }
 

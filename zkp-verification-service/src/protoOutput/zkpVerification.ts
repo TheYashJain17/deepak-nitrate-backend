@@ -30,6 +30,7 @@ export interface AddClauseInclusionCommitmentResponse {
   success: boolean;
   message: string;
   commitment: string;
+  txHash: string;
 }
 
 export interface VerifyClauseInclusionRequest {
@@ -150,7 +151,7 @@ export const AddClauseInclusionCommitmentRequest: MessageFns<AddClauseInclusionC
 };
 
 function createBaseAddClauseInclusionCommitmentResponse(): AddClauseInclusionCommitmentResponse {
-  return { success: false, message: "", commitment: "" };
+  return { success: false, message: "", commitment: "", txHash: "" };
 }
 
 export const AddClauseInclusionCommitmentResponse: MessageFns<AddClauseInclusionCommitmentResponse> = {
@@ -163,6 +164,9 @@ export const AddClauseInclusionCommitmentResponse: MessageFns<AddClauseInclusion
     }
     if (message.commitment !== "") {
       writer.uint32(26).string(message.commitment);
+    }
+    if (message.txHash !== "") {
+      writer.uint32(34).string(message.txHash);
     }
     return writer;
   },
@@ -198,6 +202,14 @@ export const AddClauseInclusionCommitmentResponse: MessageFns<AddClauseInclusion
           message.commitment = reader.string();
           continue;
         }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.txHash = reader.string();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -212,6 +224,7 @@ export const AddClauseInclusionCommitmentResponse: MessageFns<AddClauseInclusion
       success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
       message: isSet(object.message) ? globalThis.String(object.message) : "",
       commitment: isSet(object.commitment) ? globalThis.String(object.commitment) : "",
+      txHash: isSet(object.txHash) ? globalThis.String(object.txHash) : "",
     };
   },
 
@@ -225,6 +238,9 @@ export const AddClauseInclusionCommitmentResponse: MessageFns<AddClauseInclusion
     }
     if (message.commitment !== "") {
       obj.commitment = message.commitment;
+    }
+    if (message.txHash !== "") {
+      obj.txHash = message.txHash;
     }
     return obj;
   },
@@ -241,6 +257,7 @@ export const AddClauseInclusionCommitmentResponse: MessageFns<AddClauseInclusion
     message.success = object.success ?? false;
     message.message = object.message ?? "";
     message.commitment = object.commitment ?? "";
+    message.txHash = object.txHash ?? "";
     return message;
   },
 };
