@@ -49,7 +49,7 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
 
             if (!clauseSetHash || !agreementId) {
 
-                callback({ code: Status.INVALID_ARGUMENT, message: "please provide bgExpriry, bgId" });
+                callback({ code: Status.INVALID_ARGUMENT, message: "please provide clauseSetHash, agreementId" });
                 return;
 
             }
@@ -63,7 +63,7 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
 
             const contract = await getContractInstance(clauseInclusionAddress as string, clauseInclusionAbi);
 
-            const tx = await contract.registerBG(agreementId, bytes32Value);
+            const tx = await contract.addClauseInclusionCommitment(agreementId, bytes32Value);
 
             console.log("The transaction hash we are getting is", tx?.hash);
 
@@ -110,6 +110,13 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
                 return;
 
             }
+            const contract = await getContractInstance(clauseInclusionAddress as string, clauseInclusionAbi);
+
+
+            const contractCommitment = await contract.clauseInclusionCommitments(agreementId);
+
+            console.log("The commitment from user  we are getting is", commitment);
+            console.log("the commitment from contract we are getting is", contractCommitment);
 
             const { a: A, b: B, c: C, inputSignals } = await generateClauseInclusionProof({ agreementId, clauseSetHash, commitment }, WASM_PATH, ZKEY_PATH) as GenerateProofType;
 
@@ -126,7 +133,6 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
             console.log("input signals", inputSignals)
 
 
-            const contract = await getContractInstance(clauseInclusionAddress as string, clauseInclusionAbi);
 
             isProofValid = await contract.verifyClauseInclusionCommitment(agreementId, A, B, C, inputSignals);
 
