@@ -5,6 +5,7 @@ service ZKPVerificationService{
 
     rpc AddClauseInclusionCommitment(AddClauseInclusionCommitmentRequest) returns (AddClauseInclusionCommitmentResponse);
     rpc VerifyClauseInclusion(VerifyClauseInclusionRequest) returns (VerifyClauseInclusionResponse);
+    rpc AddBGExpiry(AddBGExpiryRequest) returns (AddBGExpiryResponse);
     rpc BGExpiryCheck(BGExpiryCheckRequest) returns (BGExpiryCheckResponse);
     rpc AmountWithinRange(AmountWithinRangeRequest) returns(AmountWithinRangeResponse);
 
@@ -40,6 +41,24 @@ message VerifyClauseInclusionResponse{
     bool success = 1;
     string message = 2;
     bool isValid = 3;
+
+}
+
+message AddBGExpiryRequest{
+
+    string bgExpiry = 1;
+    string POenddate = 2;
+    string Ndays = 3;
+
+}
+
+message AddBGExpiryResponse{
+
+    bool success = 1;
+    string message = 2;
+    string commitment = 3;
+    string txHash = 4;
+
 
 }
 
