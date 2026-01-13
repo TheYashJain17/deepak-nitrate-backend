@@ -18,6 +18,7 @@
 
 import { FastifyInstance } from "fastify";
 import {
+    addBgExpiryCommitment,
     addClauseInclusionCommitment,
     amountWithinRangeVerification,
     bgExpiryCheckVerification,
@@ -70,6 +71,14 @@ const zkpVerificationRoutes = async (fastify: FastifyInstance) => {
         },
         clauseInclusionVerification
     );
+
+
+    fastify.post(
+
+        "/bgExpiryCheck/addCommitment",
+        addBgExpiryCommitment
+
+    )
 
 
     fastify.post(

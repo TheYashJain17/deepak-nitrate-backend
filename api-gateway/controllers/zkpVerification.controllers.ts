@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import errorResponse from "../src/utils/responses/error.response.js";
-import { AddClauseInclusionCommitmentRequest, AddClauseInclusionCommitmentResponse, AmountWithinRangeRequest, AmountWithinRangeResponse, BGExpiryCheckRequest, BGExpiryCheckResponse, VerifyClauseInclusionRequest, VerifyClauseInclusionResponse } from "../types/zkpVerification.types.js";
+import { AddBGExpiryRequest, AddBGExpiryResponse, AddClauseInclusionCommitmentRequest, AddClauseInclusionCommitmentResponse, AmountWithinRangeRequest, AmountWithinRangeResponse, BGExpiryCheckRequest, BGExpiryCheckResponse, VerifyClauseInclusionRequest, VerifyClauseInclusionResponse } from "../types/zkpVerification.types.js";
 import zkpVerificationClient from "../src/grpc/clients/zkpVerification.client.js";
 import grpc from "@grpc/grpc-js";
 import { getGrpcToHttpStatus } from "../src/utils/utilities/getHTTPStatusCode.js";
@@ -25,15 +25,15 @@ export const healthRoute = async (req: FastifyRequest, res: FastifyReply) => {
 
 }
 
-export const addClauseInclusionCommitment = async(req: FastifyRequest, res: FastifyReply) => {
+export const addClauseInclusionCommitment = async (req: FastifyRequest, res: FastifyReply) => {
 
     try {
 
-        const {agreementId, clauseSetHash} = req.body as AddClauseInclusionCommitmentRequest;
+        const { agreementId, clauseSetHash } = req.body as AddClauseInclusionCommitmentRequest;
 
-        if(!clauseSetHash || !agreementId){
+        if (!clauseSetHash || !agreementId) {
 
-            errorResponse(res,400,"please provide clauseSetHash, agreementId");
+            errorResponse(res, 400, "please provide clauseSetHash, agreementId");
             return;
 
         }
@@ -41,9 +41,9 @@ export const addClauseInclusionCommitment = async(req: FastifyRequest, res: Fast
 
         const response = await new Promise((resolve, reject) => {
 
-            zkpVerificationClient.AddClauseInclusionCommitment({agreementId, clauseSetHash}, (err: grpc.ServiceError, success: AddClauseInclusionCommitmentResponse) => {
+            zkpVerificationClient.AddClauseInclusionCommitment({ agreementId, clauseSetHash }, (err: grpc.ServiceError, success: AddClauseInclusionCommitmentResponse) => {
 
-                if(err){
+                if (err) {
 
                     const httpCode = getGrpcToHttpStatus(err.code);
 
@@ -68,7 +68,7 @@ export const addClauseInclusionCommitment = async(req: FastifyRequest, res: Fast
 
         })
 
-        successResponse(res,201,response as AddClauseInclusionCommitmentResponse);
+        successResponse(res, 201, response as AddClauseInclusionCommitmentResponse);
 
 
     } catch (error) {
@@ -76,7 +76,7 @@ export const addClauseInclusionCommitment = async(req: FastifyRequest, res: Fast
         console.log(error);
 
         errorResponse(res, 500, "Internal Server Error");
-        
+
     }
 
 }
@@ -131,6 +131,58 @@ export const clauseInclusionVerification = async (req: FastifyRequest, res: Fast
 
         errorResponse(res, 500, "Internal Server Error");
         return;
+
+    }
+
+}
+
+export const addBgExpiryCommitment = async (req: FastifyRequest, res: FastifyReply) => {
+
+    try {
+
+        const { Ndays, POenddate, bgExpiry, bgId } = req.body as AddBGExpiryRequest;
+
+        if (!Ndays || !POenddate || !bgExpiry || !bgId) {
+
+            return errorResponse(res, 400, "please provide Ndays,POenddata,bgExpiry,bgId");
+
+        }
+
+        const response = await new Promise((resolve, reject) => {
+
+            zkpVerificationClient.AddBGExpiry({ POenddate, Ndays, bgExpiry, bgId }, (err: grpc.ServiceError, success: AddBGExpiryResponse) => {
+                if (err) {
+
+                    const httpCode = getGrpcToHttpStatus(err.code);
+
+                    const match = err?.message?.match(/{.*}/)
+                    if (match) {
+
+                        errorResponse(res, httpCode, JSON.parse(match[0]));
+                        return;
+
+                    }
+
+                    errorResponse(res, httpCode, err.message);
+                    reject(err);
+                    return
+
+                }
+
+                console.log("The response we are getting is", success);
+                resolve(success);
+
+            })
+
+        })
+
+        successResponse(res,201,response as AddBGExpiryResponse);
+
+    } catch (error) {
+
+        console.log(error);
+
+        return errorResponse(res, 500, "Internal Server Error");
 
     }
 
@@ -234,7 +286,7 @@ export const amountWithinRangeVerification = async (req: FastifyRequest, res: Fa
 
         })
 
-        successResponse(res,200,response as AmountWithinRangeResponse);
+        successResponse(res, 200, response as AmountWithinRangeResponse);
 
     } catch (error) {
 
