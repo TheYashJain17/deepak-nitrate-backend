@@ -45,6 +45,20 @@ export interface VerifyClauseInclusionResponse {
   isValid: boolean;
 }
 
+export interface AddBGExpiryRequest {
+  bgExpiry: string;
+  POenddate: string;
+  Ndays: string;
+  bgId: string;
+}
+
+export interface AddBGExpiryResponse {
+  success: boolean;
+  message: string;
+  commitment: string;
+  txHash: string;
+}
+
 export interface BGExpiryCheckRequest {
   bgExpiry: string;
   POEndDate: string;
@@ -444,6 +458,222 @@ export const VerifyClauseInclusionResponse: MessageFns<VerifyClauseInclusionResp
     message.success = object.success ?? false;
     message.message = object.message ?? "";
     message.isValid = object.isValid ?? false;
+    return message;
+  },
+};
+
+function createBaseAddBGExpiryRequest(): AddBGExpiryRequest {
+  return { bgExpiry: "", POenddate: "", Ndays: "", bgId: "" };
+}
+
+export const AddBGExpiryRequest: MessageFns<AddBGExpiryRequest> = {
+  encode(message: AddBGExpiryRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.bgExpiry !== "") {
+      writer.uint32(10).string(message.bgExpiry);
+    }
+    if (message.POenddate !== "") {
+      writer.uint32(18).string(message.POenddate);
+    }
+    if (message.Ndays !== "") {
+      writer.uint32(26).string(message.Ndays);
+    }
+    if (message.bgId !== "") {
+      writer.uint32(34).string(message.bgId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AddBGExpiryRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAddBGExpiryRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.bgExpiry = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.POenddate = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.Ndays = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.bgId = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AddBGExpiryRequest {
+    return {
+      bgExpiry: isSet(object.bgExpiry) ? globalThis.String(object.bgExpiry) : "",
+      POenddate: isSet(object.POenddate) ? globalThis.String(object.POenddate) : "",
+      Ndays: isSet(object.Ndays) ? globalThis.String(object.Ndays) : "",
+      bgId: isSet(object.bgId) ? globalThis.String(object.bgId) : "",
+    };
+  },
+
+  toJSON(message: AddBGExpiryRequest): unknown {
+    const obj: any = {};
+    if (message.bgExpiry !== "") {
+      obj.bgExpiry = message.bgExpiry;
+    }
+    if (message.POenddate !== "") {
+      obj.POenddate = message.POenddate;
+    }
+    if (message.Ndays !== "") {
+      obj.Ndays = message.Ndays;
+    }
+    if (message.bgId !== "") {
+      obj.bgId = message.bgId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<AddBGExpiryRequest>, I>>(base?: I): AddBGExpiryRequest {
+    return AddBGExpiryRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<AddBGExpiryRequest>, I>>(object: I): AddBGExpiryRequest {
+    const message = createBaseAddBGExpiryRequest();
+    message.bgExpiry = object.bgExpiry ?? "";
+    message.POenddate = object.POenddate ?? "";
+    message.Ndays = object.Ndays ?? "";
+    message.bgId = object.bgId ?? "";
+    return message;
+  },
+};
+
+function createBaseAddBGExpiryResponse(): AddBGExpiryResponse {
+  return { success: false, message: "", commitment: "", txHash: "" };
+}
+
+export const AddBGExpiryResponse: MessageFns<AddBGExpiryResponse> = {
+  encode(message: AddBGExpiryResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    if (message.commitment !== "") {
+      writer.uint32(26).string(message.commitment);
+    }
+    if (message.txHash !== "") {
+      writer.uint32(34).string(message.txHash);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AddBGExpiryResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAddBGExpiryResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.commitment = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.txHash = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AddBGExpiryResponse {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+      commitment: isSet(object.commitment) ? globalThis.String(object.commitment) : "",
+      txHash: isSet(object.txHash) ? globalThis.String(object.txHash) : "",
+    };
+  },
+
+  toJSON(message: AddBGExpiryResponse): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    if (message.commitment !== "") {
+      obj.commitment = message.commitment;
+    }
+    if (message.txHash !== "") {
+      obj.txHash = message.txHash;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<AddBGExpiryResponse>, I>>(base?: I): AddBGExpiryResponse {
+    return AddBGExpiryResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<AddBGExpiryResponse>, I>>(object: I): AddBGExpiryResponse {
+    const message = createBaseAddBGExpiryResponse();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
+    message.commitment = object.commitment ?? "";
+    message.txHash = object.txHash ?? "";
     return message;
   },
 };
@@ -858,6 +1088,15 @@ export const ZKPVerificationServiceService = {
       Buffer.from(VerifyClauseInclusionResponse.encode(value).finish()),
     responseDeserialize: (value: Buffer): VerifyClauseInclusionResponse => VerifyClauseInclusionResponse.decode(value),
   },
+  addBgExpiry: {
+    path: "/zkpVerification.ZKPVerificationService/AddBGExpiry",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: AddBGExpiryRequest): Buffer => Buffer.from(AddBGExpiryRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): AddBGExpiryRequest => AddBGExpiryRequest.decode(value),
+    responseSerialize: (value: AddBGExpiryResponse): Buffer => Buffer.from(AddBGExpiryResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): AddBGExpiryResponse => AddBGExpiryResponse.decode(value),
+  },
   bgExpiryCheck: {
     path: "/zkpVerification.ZKPVerificationService/BGExpiryCheck",
     requestStream: false,
@@ -887,6 +1126,7 @@ export interface ZKPVerificationServiceServer extends UntypedServiceImplementati
     AddClauseInclusionCommitmentResponse
   >;
   verifyClauseInclusion: handleUnaryCall<VerifyClauseInclusionRequest, VerifyClauseInclusionResponse>;
+  addBgExpiry: handleUnaryCall<AddBGExpiryRequest, AddBGExpiryResponse>;
   bgExpiryCheck: handleUnaryCall<BGExpiryCheckRequest, BGExpiryCheckResponse>;
   amountWithinRange: handleUnaryCall<AmountWithinRangeRequest, AmountWithinRangeResponse>;
 }
@@ -921,6 +1161,21 @@ export interface ZKPVerificationServiceClient extends Client {
     metadata: Metadata,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: VerifyClauseInclusionResponse) => void,
+  ): ClientUnaryCall;
+  addBgExpiry(
+    request: AddBGExpiryRequest,
+    callback: (error: ServiceError | null, response: AddBGExpiryResponse) => void,
+  ): ClientUnaryCall;
+  addBgExpiry(
+    request: AddBGExpiryRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: AddBGExpiryResponse) => void,
+  ): ClientUnaryCall;
+  addBgExpiry(
+    request: AddBGExpiryRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: AddBGExpiryResponse) => void,
   ): ClientUnaryCall;
   bgExpiryCheck(
     request: BGExpiryCheckRequest,
