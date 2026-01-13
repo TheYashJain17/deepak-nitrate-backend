@@ -49,6 +49,7 @@ export interface AddBGExpiryRequest {
   bgExpiry: string;
   POenddate: string;
   Ndays: string;
+  bgId: string;
 }
 
 export interface AddBGExpiryResponse {
@@ -462,7 +463,7 @@ export const VerifyClauseInclusionResponse: MessageFns<VerifyClauseInclusionResp
 };
 
 function createBaseAddBGExpiryRequest(): AddBGExpiryRequest {
-  return { bgExpiry: "", POenddate: "", Ndays: "" };
+  return { bgExpiry: "", POenddate: "", Ndays: "", bgId: "" };
 }
 
 export const AddBGExpiryRequest: MessageFns<AddBGExpiryRequest> = {
@@ -475,6 +476,9 @@ export const AddBGExpiryRequest: MessageFns<AddBGExpiryRequest> = {
     }
     if (message.Ndays !== "") {
       writer.uint32(26).string(message.Ndays);
+    }
+    if (message.bgId !== "") {
+      writer.uint32(34).string(message.bgId);
     }
     return writer;
   },
@@ -510,6 +514,14 @@ export const AddBGExpiryRequest: MessageFns<AddBGExpiryRequest> = {
           message.Ndays = reader.string();
           continue;
         }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.bgId = reader.string();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -524,6 +536,7 @@ export const AddBGExpiryRequest: MessageFns<AddBGExpiryRequest> = {
       bgExpiry: isSet(object.bgExpiry) ? globalThis.String(object.bgExpiry) : "",
       POenddate: isSet(object.POenddate) ? globalThis.String(object.POenddate) : "",
       Ndays: isSet(object.Ndays) ? globalThis.String(object.Ndays) : "",
+      bgId: isSet(object.bgId) ? globalThis.String(object.bgId) : "",
     };
   },
 
@@ -538,6 +551,9 @@ export const AddBGExpiryRequest: MessageFns<AddBGExpiryRequest> = {
     if (message.Ndays !== "") {
       obj.Ndays = message.Ndays;
     }
+    if (message.bgId !== "") {
+      obj.bgId = message.bgId;
+    }
     return obj;
   },
 
@@ -549,6 +565,7 @@ export const AddBGExpiryRequest: MessageFns<AddBGExpiryRequest> = {
     message.bgExpiry = object.bgExpiry ?? "";
     message.POenddate = object.POenddate ?? "";
     message.Ndays = object.Ndays ?? "";
+    message.bgId = object.bgId ?? "";
     return message;
   },
 };

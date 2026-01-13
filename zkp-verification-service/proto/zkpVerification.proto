@@ -49,6 +49,7 @@ message AddBGExpiryRequest{
     string bgExpiry = 1;
     string POenddate = 2;
     string Ndays = 3;
+    string bgId = 4;
 
 }
 

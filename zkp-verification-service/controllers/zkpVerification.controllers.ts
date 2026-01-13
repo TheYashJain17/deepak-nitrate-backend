@@ -1,5 +1,5 @@
 import { Status } from "@grpc/grpc-js/build/src/constants.js";
-import { AddClauseInclusionCommitmentRequest, AmountWithinRangeRequest, BGExpiryCheckRequest, VerifyClauseInclusionRequest, ZKPVerificationServiceServer } from "../src/protoOutput/zkpVerification.js";
+import { AddBGExpiryRequest, AddClauseInclusionCommitmentRequest, AmountWithinRangeRequest, BGExpiryCheckRequest, VerifyClauseInclusionRequest, ZKPVerificationServiceServer } from "../src/protoOutput/zkpVerification.js";
 import getContractInstance from "../src/utils/utilities/getContractInstance.js";
 
 import path from "path";
@@ -155,6 +155,44 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
             callback({ message: "Internal Server Error", code: Status.INTERNAL, details: JSON.stringify({ isValid: false, success: false }) }, null);
             return;
 
+        }
+
+    },
+
+    async addBgExpiry(call, callback){
+
+        try {
+      
+            const {bgExpiry,POenddate,Ndays, bgId} = call.request as AddBGExpiryRequest;
+
+            if(!bgExpiry || !POenddate || !Ndays || !bgId){
+
+                return callback({code: Status.INVALID_ARGUMENT, message: "please provide bgExpiry,POendate,Ndays,bgId"});
+
+            }
+
+            const commitment = await getCommitmentHash(bgExpiry) as string;
+
+            const contract = await getContractInstance(bgExpiryAddress as string, BGExpiryAbi);
+
+            const tx = await contract.registerBG(bgId,commitment);
+
+            if(!tx?.hash){
+
+                return callback({code: Status.UNKNOWN, message: "failed to add commitment"});
+
+            }
+
+            callback(null,{success: true, message: "Commiment Added Sucessfully", txHash: tx?.hash, commitment})
+
+
+
+        } catch (error) {
+
+            console.log(error);
+
+            return callback({code: Status.INTERNAL, message: "Internal Server Error"});
+            
         }
 
     },
