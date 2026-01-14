@@ -1,5 +1,5 @@
 import { Status } from "@grpc/grpc-js/build/src/constants.js";
-import { AddBGExpiryRequest, AddClauseInclusionCommitmentRequest, AmountWithinRangeRequest, BGExpiryCheckRequest, VerifyClauseInclusionRequest, ZKPVerificationServiceServer } from "../src/protoOutput/zkpVerification.js";
+import { AddAmountWithRangeCommitmentRequest, AddBGExpiryRequest, AddClauseInclusionCommitmentRequest, AmountWithinRangeRequest, BGExpiryCheckRequest, VerifyClauseInclusionRequest, ZKPVerificationServiceServer } from "../src/protoOutput/zkpVerification.js";
 import getContractInstance from "../src/utils/utilities/getContractInstance.js";
 
 import path from "path";
@@ -255,6 +255,45 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
             return;
 
 
+        }
+
+    },
+
+    async addAmountWithRangeCommitment(call,callback){
+
+        try {
+            
+            const {invoiceTotal, poBalance, id} = call.request as AddAmountWithRangeCommitmentRequest;
+
+            if(!invoiceTotal || !poBalance || !id){
+
+                return callback({code: Status.INVALID_ARGUMENT, message: "please provide inoviceTotal, poBalance and id"});
+
+            }
+
+            const data = {poBalance};
+
+            const commitment = await getCommitmentHash(data);
+
+            const contract = await getContractInstance(amountWithinRangeAddress as string, AmountWithinRangeAbi);
+
+            const tx = await contract.addAmountWithinRangeCommitment(id, commitment);
+
+            if(!tx?.hash){
+
+                return callback({code: Status.UNKNOWN, message: "failed to add commitment"});
+
+            }
+
+            return callback(null,{success: true, message: "Commitment Added Successfully", txHash: tx?.hash, commitment: commitment as string});
+            
+
+        } catch (error) {
+
+            console.log(error);
+
+            return callback({code: Status.INTERNAL, message: "Internal Server Error"});
+            
         }
 
     },

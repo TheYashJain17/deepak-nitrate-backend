@@ -75,6 +75,7 @@ export interface BGExpiryCheckResponse {
 export interface AddAmountWithRangeCommitmentRequest {
   invoiceTotal: string;
   poBalance: string;
+  id: string;
 }
 
 export interface AddAmountWithRangeCommitmentResponse {
@@ -891,7 +892,7 @@ export const BGExpiryCheckResponse: MessageFns<BGExpiryCheckResponse> = {
 };
 
 function createBaseAddAmountWithRangeCommitmentRequest(): AddAmountWithRangeCommitmentRequest {
-  return { invoiceTotal: "", poBalance: "" };
+  return { invoiceTotal: "", poBalance: "", id: "" };
 }
 
 export const AddAmountWithRangeCommitmentRequest: MessageFns<AddAmountWithRangeCommitmentRequest> = {
@@ -901,6 +902,9 @@ export const AddAmountWithRangeCommitmentRequest: MessageFns<AddAmountWithRangeC
     }
     if (message.poBalance !== "") {
       writer.uint32(18).string(message.poBalance);
+    }
+    if (message.id !== "") {
+      writer.uint32(26).string(message.id);
     }
     return writer;
   },
@@ -928,6 +932,14 @@ export const AddAmountWithRangeCommitmentRequest: MessageFns<AddAmountWithRangeC
           message.poBalance = reader.string();
           continue;
         }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -941,6 +953,7 @@ export const AddAmountWithRangeCommitmentRequest: MessageFns<AddAmountWithRangeC
     return {
       invoiceTotal: isSet(object.invoiceTotal) ? globalThis.String(object.invoiceTotal) : "",
       poBalance: isSet(object.poBalance) ? globalThis.String(object.poBalance) : "",
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
     };
   },
 
@@ -951,6 +964,9 @@ export const AddAmountWithRangeCommitmentRequest: MessageFns<AddAmountWithRangeC
     }
     if (message.poBalance !== "") {
       obj.poBalance = message.poBalance;
+    }
+    if (message.id !== "") {
+      obj.id = message.id;
     }
     return obj;
   },
@@ -966,6 +982,7 @@ export const AddAmountWithRangeCommitmentRequest: MessageFns<AddAmountWithRangeC
     const message = createBaseAddAmountWithRangeCommitmentRequest();
     message.invoiceTotal = object.invoiceTotal ?? "";
     message.poBalance = object.poBalance ?? "";
+    message.id = object.id ?? "";
     return message;
   },
 };

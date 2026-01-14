@@ -86,6 +86,7 @@ message AddAmountWithRangeCommitmentRequest{
 
     string invoiceTotal = 1;
     string poBalance = 2;
+    string id = 3;
 
 }
 
