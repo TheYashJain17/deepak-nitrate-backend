@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import errorResponse from "../src/utils/responses/error.response.js";
-import { AddBGExpiryRequest, AddBGExpiryResponse, AddClauseInclusionCommitmentRequest, AddClauseInclusionCommitmentResponse, AmountWithinRangeRequest, AmountWithinRangeResponse, BGExpiryCheckRequest, BGExpiryCheckResponse, VerifyClauseInclusionRequest, VerifyClauseInclusionResponse } from "../types/zkpVerification.types.js";
+import { AddAmountWithRangeCommitmentRequest, AddAmountWithRangeCommitmentResponse, AddBGExpiryRequest, AddBGExpiryResponse, AddClauseInclusionCommitmentRequest, AddClauseInclusionCommitmentResponse, AmountWithinRangeRequest, AmountWithinRangeResponse, BGExpiryCheckRequest, BGExpiryCheckResponse, VerifyClauseInclusionRequest, VerifyClauseInclusionResponse } from "../types/zkpVerification.types.js";
 import zkpVerificationClient from "../src/grpc/clients/zkpVerification.client.js";
 import grpc from "@grpc/grpc-js";
 import { getGrpcToHttpStatus } from "../src/utils/utilities/getHTTPStatusCode.js";
@@ -176,7 +176,7 @@ export const addBgExpiryCommitment = async (req: FastifyRequest, res: FastifyRep
 
         })
 
-        successResponse(res,201,response as AddBGExpiryResponse);
+        successResponse(res, 201, response as AddBGExpiryResponse);
 
     } catch (error) {
 
@@ -238,6 +238,58 @@ export const bgExpiryCheckVerification = async (req: FastifyRequest, res: Fastif
         console.log(error);
 
         errorResponse(res, 500, "Internal Server Error");
+
+    }
+
+}
+
+export const addAmountWithinRangeCommitment = async (req: FastifyRequest, res: FastifyReply) => {
+
+    try {
+
+        const { id, invoiceTotal, poBalance } = req.body as AddAmountWithRangeCommitmentRequest;
+
+        if (!id || !invoiceTotal || !poBalance) {
+
+            return errorResponse(res, 400, "please provide id,invoiceTotal and poBalance");
+
+        }
+
+        const response = await new Promise((resolve, reject) => {
+
+            zkpVerificationClient.AddAmountWithRangeCommitment({ id, invoiceTotal, poBalance }, (err: grpc.ServiceError, success: AddAmountWithRangeCommitmentResponse) => {
+
+                if (err) {
+
+                    const httpCode = getGrpcToHttpStatus(err.code);
+
+                    const match = err?.message?.match(/{.*}/)
+                    if (match) {
+
+                        errorResponse(res, httpCode, JSON.parse(match[0]));
+                        return;
+
+                    }
+
+                    errorResponse(res, httpCode, err.message);
+                    reject(err);
+                    return
+
+                }
+
+                resolve(success);
+
+            })
+
+        })
+
+        successResponse(res,201, response as AddAmountWithRangeCommitmentResponse);
+
+    } catch (error) {
+
+        console.log(error);
+
+        return errorResponse(res, 500, "Internal Server Error");
 
     }
 
