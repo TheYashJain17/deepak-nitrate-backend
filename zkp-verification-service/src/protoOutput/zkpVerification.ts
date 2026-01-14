@@ -72,6 +72,18 @@ export interface BGExpiryCheckResponse {
   isValid: boolean;
 }
 
+export interface AddAmountWithRangeCommitmentRequest {
+  invoiceTotal: string;
+  poBalance: string;
+}
+
+export interface AddAmountWithRangeCommitmentResponse {
+  success: boolean;
+  message: string;
+  commitment: string;
+  txHash: string;
+}
+
 export interface AmountWithinRangeRequest {
   invoiceTotal: string;
   poBalance: string;
@@ -878,6 +890,198 @@ export const BGExpiryCheckResponse: MessageFns<BGExpiryCheckResponse> = {
   },
 };
 
+function createBaseAddAmountWithRangeCommitmentRequest(): AddAmountWithRangeCommitmentRequest {
+  return { invoiceTotal: "", poBalance: "" };
+}
+
+export const AddAmountWithRangeCommitmentRequest: MessageFns<AddAmountWithRangeCommitmentRequest> = {
+  encode(message: AddAmountWithRangeCommitmentRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.invoiceTotal !== "") {
+      writer.uint32(10).string(message.invoiceTotal);
+    }
+    if (message.poBalance !== "") {
+      writer.uint32(18).string(message.poBalance);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AddAmountWithRangeCommitmentRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAddAmountWithRangeCommitmentRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.invoiceTotal = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.poBalance = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AddAmountWithRangeCommitmentRequest {
+    return {
+      invoiceTotal: isSet(object.invoiceTotal) ? globalThis.String(object.invoiceTotal) : "",
+      poBalance: isSet(object.poBalance) ? globalThis.String(object.poBalance) : "",
+    };
+  },
+
+  toJSON(message: AddAmountWithRangeCommitmentRequest): unknown {
+    const obj: any = {};
+    if (message.invoiceTotal !== "") {
+      obj.invoiceTotal = message.invoiceTotal;
+    }
+    if (message.poBalance !== "") {
+      obj.poBalance = message.poBalance;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<AddAmountWithRangeCommitmentRequest>, I>>(
+    base?: I,
+  ): AddAmountWithRangeCommitmentRequest {
+    return AddAmountWithRangeCommitmentRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<AddAmountWithRangeCommitmentRequest>, I>>(
+    object: I,
+  ): AddAmountWithRangeCommitmentRequest {
+    const message = createBaseAddAmountWithRangeCommitmentRequest();
+    message.invoiceTotal = object.invoiceTotal ?? "";
+    message.poBalance = object.poBalance ?? "";
+    return message;
+  },
+};
+
+function createBaseAddAmountWithRangeCommitmentResponse(): AddAmountWithRangeCommitmentResponse {
+  return { success: false, message: "", commitment: "", txHash: "" };
+}
+
+export const AddAmountWithRangeCommitmentResponse: MessageFns<AddAmountWithRangeCommitmentResponse> = {
+  encode(message: AddAmountWithRangeCommitmentResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.success !== false) {
+      writer.uint32(8).bool(message.success);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    if (message.commitment !== "") {
+      writer.uint32(26).string(message.commitment);
+    }
+    if (message.txHash !== "") {
+      writer.uint32(34).string(message.txHash);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): AddAmountWithRangeCommitmentResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAddAmountWithRangeCommitmentResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.message = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.commitment = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.txHash = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AddAmountWithRangeCommitmentResponse {
+    return {
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+      message: isSet(object.message) ? globalThis.String(object.message) : "",
+      commitment: isSet(object.commitment) ? globalThis.String(object.commitment) : "",
+      txHash: isSet(object.txHash) ? globalThis.String(object.txHash) : "",
+    };
+  },
+
+  toJSON(message: AddAmountWithRangeCommitmentResponse): unknown {
+    const obj: any = {};
+    if (message.success !== false) {
+      obj.success = message.success;
+    }
+    if (message.message !== "") {
+      obj.message = message.message;
+    }
+    if (message.commitment !== "") {
+      obj.commitment = message.commitment;
+    }
+    if (message.txHash !== "") {
+      obj.txHash = message.txHash;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<AddAmountWithRangeCommitmentResponse>, I>>(
+    base?: I,
+  ): AddAmountWithRangeCommitmentResponse {
+    return AddAmountWithRangeCommitmentResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<AddAmountWithRangeCommitmentResponse>, I>>(
+    object: I,
+  ): AddAmountWithRangeCommitmentResponse {
+    const message = createBaseAddAmountWithRangeCommitmentResponse();
+    message.success = object.success ?? false;
+    message.message = object.message ?? "";
+    message.commitment = object.commitment ?? "";
+    message.txHash = object.txHash ?? "";
+    return message;
+  },
+};
+
 function createBaseAmountWithinRangeRequest(): AmountWithinRangeRequest {
   return { invoiceTotal: "", poBalance: "", poBalanceHash: "" };
 }
@@ -1107,6 +1311,19 @@ export const ZKPVerificationServiceService = {
       Buffer.from(BGExpiryCheckResponse.encode(value).finish()),
     responseDeserialize: (value: Buffer): BGExpiryCheckResponse => BGExpiryCheckResponse.decode(value),
   },
+  addAmountWithRangeCommitment: {
+    path: "/zkpVerification.ZKPVerificationService/AddAmountWithRangeCommitment",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: AddAmountWithRangeCommitmentRequest): Buffer =>
+      Buffer.from(AddAmountWithRangeCommitmentRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): AddAmountWithRangeCommitmentRequest =>
+      AddAmountWithRangeCommitmentRequest.decode(value),
+    responseSerialize: (value: AddAmountWithRangeCommitmentResponse): Buffer =>
+      Buffer.from(AddAmountWithRangeCommitmentResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): AddAmountWithRangeCommitmentResponse =>
+      AddAmountWithRangeCommitmentResponse.decode(value),
+  },
   amountWithinRange: {
     path: "/zkpVerification.ZKPVerificationService/AmountWithinRange",
     requestStream: false,
@@ -1128,6 +1345,10 @@ export interface ZKPVerificationServiceServer extends UntypedServiceImplementati
   verifyClauseInclusion: handleUnaryCall<VerifyClauseInclusionRequest, VerifyClauseInclusionResponse>;
   addBgExpiry: handleUnaryCall<AddBGExpiryRequest, AddBGExpiryResponse>;
   bgExpiryCheck: handleUnaryCall<BGExpiryCheckRequest, BGExpiryCheckResponse>;
+  addAmountWithRangeCommitment: handleUnaryCall<
+    AddAmountWithRangeCommitmentRequest,
+    AddAmountWithRangeCommitmentResponse
+  >;
   amountWithinRange: handleUnaryCall<AmountWithinRangeRequest, AmountWithinRangeResponse>;
 }
 
@@ -1191,6 +1412,21 @@ export interface ZKPVerificationServiceClient extends Client {
     metadata: Metadata,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: BGExpiryCheckResponse) => void,
+  ): ClientUnaryCall;
+  addAmountWithRangeCommitment(
+    request: AddAmountWithRangeCommitmentRequest,
+    callback: (error: ServiceError | null, response: AddAmountWithRangeCommitmentResponse) => void,
+  ): ClientUnaryCall;
+  addAmountWithRangeCommitment(
+    request: AddAmountWithRangeCommitmentRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: AddAmountWithRangeCommitmentResponse) => void,
+  ): ClientUnaryCall;
+  addAmountWithRangeCommitment(
+    request: AddAmountWithRangeCommitmentRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: AddAmountWithRangeCommitmentResponse) => void,
   ): ClientUnaryCall;
   amountWithinRange(
     request: AmountWithinRangeRequest,
