@@ -54,7 +54,7 @@ const zkpVerificationRoutes = async (fastify: FastifyInstance) => {
         "/clauseInclusion/addCommitment",
         addClauseInclusionCommitment
 
-    )
+    );
 
     fastify.post(
         "/clauseInclusion/verify",
