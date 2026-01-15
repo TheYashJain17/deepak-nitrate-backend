@@ -27,6 +27,8 @@ const generateClauseInclusionProof = async (inputs: { agreementId: string, claus
 
     } catch (error: unknown) {
 
+        // console.log("The error we are geting in clause inclusion proof is", error);
+
         const normalised = normalizeZkpError(error);
 
         // console.log("Proof Generation failed", normalised);

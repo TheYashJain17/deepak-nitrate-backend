@@ -54,7 +54,7 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
 
             }
 
-            const data = {clauseSetHash};
+            const data = {agreementId,clauseSetHash};
 
             const bytes32Value = await getCommitmentHash(data) as string;
 
@@ -118,7 +118,7 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
             console.log("The commitment from user  we are getting is", commitment);
             console.log("the commitment from contract we are getting is", contractCommitment);
 
-            const { a: A, b: B, c: C, inputSignals } = await generateClauseInclusionProof({ agreementId, clauseSetHash, commitment }, WASM_PATH, ZKEY_PATH) as GenerateProofType;
+            const { a: A, b: B, c: C, inputSignals } = await generateClauseInclusionProof({ agreementId, clauseSetHash, commitment: contractCommitment }, WASM_PATH, ZKEY_PATH) as GenerateProofType;
 
             if (!A || !B || !C || !inputSignals) {
 
