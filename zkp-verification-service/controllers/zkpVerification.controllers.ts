@@ -171,7 +171,9 @@ export const ZKPVerificationServiceHandlers: ZKPVerificationServiceServer = {
 
             }
 
-            const commitment = await getCommitmentHash(bgExpiry) as string;
+            const data = {bgExpiry};
+
+            const commitment = await getCommitmentHash(data) as string;
 
             const contract = await getContractInstance(bgExpiryAddress as string, BGExpiryAbi);
 

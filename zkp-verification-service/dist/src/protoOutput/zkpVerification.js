@@ -7,6 +7,174 @@
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { makeGenericClientConstructor, } from "@grpc/grpc-js";
 export const protobufPackage = "zkpVerification";
+function createBaseAddClauseInclusionCommitmentRequest() {
+    return { agreementId: "", clauseSetHash: "" };
+}
+export const AddClauseInclusionCommitmentRequest = {
+    encode(message, writer = new BinaryWriter()) {
+        if (message.agreementId !== "") {
+            writer.uint32(10).string(message.agreementId);
+        }
+        if (message.clauseSetHash !== "") {
+            writer.uint32(18).string(message.clauseSetHash);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+        const end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseAddClauseInclusionCommitmentRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1: {
+                    if (tag !== 10) {
+                        break;
+                    }
+                    message.agreementId = reader.string();
+                    continue;
+                }
+                case 2: {
+                    if (tag !== 18) {
+                        break;
+                    }
+                    message.clauseSetHash = reader.string();
+                    continue;
+                }
+            }
+            if ((tag & 7) === 4 || tag === 0) {
+                break;
+            }
+            reader.skip(tag & 7);
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            agreementId: isSet(object.agreementId) ? globalThis.String(object.agreementId) : "",
+            clauseSetHash: isSet(object.clauseSetHash) ? globalThis.String(object.clauseSetHash) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.agreementId !== "") {
+            obj.agreementId = message.agreementId;
+        }
+        if (message.clauseSetHash !== "") {
+            obj.clauseSetHash = message.clauseSetHash;
+        }
+        return obj;
+    },
+    create(base) {
+        return AddClauseInclusionCommitmentRequest.fromPartial(base !== null && base !== void 0 ? base : {});
+    },
+    fromPartial(object) {
+        var _a, _b;
+        const message = createBaseAddClauseInclusionCommitmentRequest();
+        message.agreementId = (_a = object.agreementId) !== null && _a !== void 0 ? _a : "";
+        message.clauseSetHash = (_b = object.clauseSetHash) !== null && _b !== void 0 ? _b : "";
+        return message;
+    },
+};
+function createBaseAddClauseInclusionCommitmentResponse() {
+    return { success: false, message: "", commitment: "", txHash: "" };
+}
+export const AddClauseInclusionCommitmentResponse = {
+    encode(message, writer = new BinaryWriter()) {
+        if (message.success !== false) {
+            writer.uint32(8).bool(message.success);
+        }
+        if (message.message !== "") {
+            writer.uint32(18).string(message.message);
+        }
+        if (message.commitment !== "") {
+            writer.uint32(26).string(message.commitment);
+        }
+        if (message.txHash !== "") {
+            writer.uint32(34).string(message.txHash);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+        const end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseAddClauseInclusionCommitmentResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1: {
+                    if (tag !== 8) {
+                        break;
+                    }
+                    message.success = reader.bool();
+                    continue;
+                }
+                case 2: {
+                    if (tag !== 18) {
+                        break;
+                    }
+                    message.message = reader.string();
+                    continue;
+                }
+                case 3: {
+                    if (tag !== 26) {
+                        break;
+                    }
+                    message.commitment = reader.string();
+                    continue;
+                }
+                case 4: {
+                    if (tag !== 34) {
+                        break;
+                    }
+                    message.txHash = reader.string();
+                    continue;
+                }
+            }
+            if ((tag & 7) === 4 || tag === 0) {
+                break;
+            }
+            reader.skip(tag & 7);
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+            message: isSet(object.message) ? globalThis.String(object.message) : "",
+            commitment: isSet(object.commitment) ? globalThis.String(object.commitment) : "",
+            txHash: isSet(object.txHash) ? globalThis.String(object.txHash) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.success !== false) {
+            obj.success = message.success;
+        }
+        if (message.message !== "") {
+            obj.message = message.message;
+        }
+        if (message.commitment !== "") {
+            obj.commitment = message.commitment;
+        }
+        if (message.txHash !== "") {
+            obj.txHash = message.txHash;
+        }
+        return obj;
+    },
+    create(base) {
+        return AddClauseInclusionCommitmentResponse.fromPartial(base !== null && base !== void 0 ? base : {});
+    },
+    fromPartial(object) {
+        var _a, _b, _c, _d;
+        const message = createBaseAddClauseInclusionCommitmentResponse();
+        message.success = (_a = object.success) !== null && _a !== void 0 ? _a : false;
+        message.message = (_b = object.message) !== null && _b !== void 0 ? _b : "";
+        message.commitment = (_c = object.commitment) !== null && _c !== void 0 ? _c : "";
+        message.txHash = (_d = object.txHash) !== null && _d !== void 0 ? _d : "";
+        return message;
+    },
+};
 function createBaseVerifyClauseInclusionRequest() {
     return { agreementId: "", clauseSetHash: "", commitment: "" };
 }
@@ -172,6 +340,204 @@ export const VerifyClauseInclusionResponse = {
         message.success = (_a = object.success) !== null && _a !== void 0 ? _a : false;
         message.message = (_b = object.message) !== null && _b !== void 0 ? _b : "";
         message.isValid = (_c = object.isValid) !== null && _c !== void 0 ? _c : false;
+        return message;
+    },
+};
+function createBaseAddBGExpiryRequest() {
+    return { bgExpiry: "", POenddate: "", Ndays: "", bgId: "" };
+}
+export const AddBGExpiryRequest = {
+    encode(message, writer = new BinaryWriter()) {
+        if (message.bgExpiry !== "") {
+            writer.uint32(10).string(message.bgExpiry);
+        }
+        if (message.POenddate !== "") {
+            writer.uint32(18).string(message.POenddate);
+        }
+        if (message.Ndays !== "") {
+            writer.uint32(26).string(message.Ndays);
+        }
+        if (message.bgId !== "") {
+            writer.uint32(34).string(message.bgId);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+        const end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseAddBGExpiryRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1: {
+                    if (tag !== 10) {
+                        break;
+                    }
+                    message.bgExpiry = reader.string();
+                    continue;
+                }
+                case 2: {
+                    if (tag !== 18) {
+                        break;
+                    }
+                    message.POenddate = reader.string();
+                    continue;
+                }
+                case 3: {
+                    if (tag !== 26) {
+                        break;
+                    }
+                    message.Ndays = reader.string();
+                    continue;
+                }
+                case 4: {
+                    if (tag !== 34) {
+                        break;
+                    }
+                    message.bgId = reader.string();
+                    continue;
+                }
+            }
+            if ((tag & 7) === 4 || tag === 0) {
+                break;
+            }
+            reader.skip(tag & 7);
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            bgExpiry: isSet(object.bgExpiry) ? globalThis.String(object.bgExpiry) : "",
+            POenddate: isSet(object.POenddate) ? globalThis.String(object.POenddate) : "",
+            Ndays: isSet(object.Ndays) ? globalThis.String(object.Ndays) : "",
+            bgId: isSet(object.bgId) ? globalThis.String(object.bgId) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.bgExpiry !== "") {
+            obj.bgExpiry = message.bgExpiry;
+        }
+        if (message.POenddate !== "") {
+            obj.POenddate = message.POenddate;
+        }
+        if (message.Ndays !== "") {
+            obj.Ndays = message.Ndays;
+        }
+        if (message.bgId !== "") {
+            obj.bgId = message.bgId;
+        }
+        return obj;
+    },
+    create(base) {
+        return AddBGExpiryRequest.fromPartial(base !== null && base !== void 0 ? base : {});
+    },
+    fromPartial(object) {
+        var _a, _b, _c, _d;
+        const message = createBaseAddBGExpiryRequest();
+        message.bgExpiry = (_a = object.bgExpiry) !== null && _a !== void 0 ? _a : "";
+        message.POenddate = (_b = object.POenddate) !== null && _b !== void 0 ? _b : "";
+        message.Ndays = (_c = object.Ndays) !== null && _c !== void 0 ? _c : "";
+        message.bgId = (_d = object.bgId) !== null && _d !== void 0 ? _d : "";
+        return message;
+    },
+};
+function createBaseAddBGExpiryResponse() {
+    return { success: false, message: "", commitment: "", txHash: "" };
+}
+export const AddBGExpiryResponse = {
+    encode(message, writer = new BinaryWriter()) {
+        if (message.success !== false) {
+            writer.uint32(8).bool(message.success);
+        }
+        if (message.message !== "") {
+            writer.uint32(18).string(message.message);
+        }
+        if (message.commitment !== "") {
+            writer.uint32(26).string(message.commitment);
+        }
+        if (message.txHash !== "") {
+            writer.uint32(34).string(message.txHash);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+        const end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseAddBGExpiryResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1: {
+                    if (tag !== 8) {
+                        break;
+                    }
+                    message.success = reader.bool();
+                    continue;
+                }
+                case 2: {
+                    if (tag !== 18) {
+                        break;
+                    }
+                    message.message = reader.string();
+                    continue;
+                }
+                case 3: {
+                    if (tag !== 26) {
+                        break;
+                    }
+                    message.commitment = reader.string();
+                    continue;
+                }
+                case 4: {
+                    if (tag !== 34) {
+                        break;
+                    }
+                    message.txHash = reader.string();
+                    continue;
+                }
+            }
+            if ((tag & 7) === 4 || tag === 0) {
+                break;
+            }
+            reader.skip(tag & 7);
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+            message: isSet(object.message) ? globalThis.String(object.message) : "",
+            commitment: isSet(object.commitment) ? globalThis.String(object.commitment) : "",
+            txHash: isSet(object.txHash) ? globalThis.String(object.txHash) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.success !== false) {
+            obj.success = message.success;
+        }
+        if (message.message !== "") {
+            obj.message = message.message;
+        }
+        if (message.commitment !== "") {
+            obj.commitment = message.commitment;
+        }
+        if (message.txHash !== "") {
+            obj.txHash = message.txHash;
+        }
+        return obj;
+    },
+    create(base) {
+        return AddBGExpiryResponse.fromPartial(base !== null && base !== void 0 ? base : {});
+    },
+    fromPartial(object) {
+        var _a, _b, _c, _d;
+        const message = createBaseAddBGExpiryResponse();
+        message.success = (_a = object.success) !== null && _a !== void 0 ? _a : false;
+        message.message = (_b = object.message) !== null && _b !== void 0 ? _b : "";
+        message.commitment = (_c = object.commitment) !== null && _c !== void 0 ? _c : "";
+        message.txHash = (_d = object.txHash) !== null && _d !== void 0 ? _d : "";
         return message;
     },
 };
@@ -358,6 +724,189 @@ export const BGExpiryCheckResponse = {
         return message;
     },
 };
+function createBaseAddAmountWithRangeCommitmentRequest() {
+    return { invoiceTotal: "", poBalance: "", id: "" };
+}
+export const AddAmountWithRangeCommitmentRequest = {
+    encode(message, writer = new BinaryWriter()) {
+        if (message.invoiceTotal !== "") {
+            writer.uint32(10).string(message.invoiceTotal);
+        }
+        if (message.poBalance !== "") {
+            writer.uint32(18).string(message.poBalance);
+        }
+        if (message.id !== "") {
+            writer.uint32(26).string(message.id);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+        const end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseAddAmountWithRangeCommitmentRequest();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1: {
+                    if (tag !== 10) {
+                        break;
+                    }
+                    message.invoiceTotal = reader.string();
+                    continue;
+                }
+                case 2: {
+                    if (tag !== 18) {
+                        break;
+                    }
+                    message.poBalance = reader.string();
+                    continue;
+                }
+                case 3: {
+                    if (tag !== 26) {
+                        break;
+                    }
+                    message.id = reader.string();
+                    continue;
+                }
+            }
+            if ((tag & 7) === 4 || tag === 0) {
+                break;
+            }
+            reader.skip(tag & 7);
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            invoiceTotal: isSet(object.invoiceTotal) ? globalThis.String(object.invoiceTotal) : "",
+            poBalance: isSet(object.poBalance) ? globalThis.String(object.poBalance) : "",
+            id: isSet(object.id) ? globalThis.String(object.id) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.invoiceTotal !== "") {
+            obj.invoiceTotal = message.invoiceTotal;
+        }
+        if (message.poBalance !== "") {
+            obj.poBalance = message.poBalance;
+        }
+        if (message.id !== "") {
+            obj.id = message.id;
+        }
+        return obj;
+    },
+    create(base) {
+        return AddAmountWithRangeCommitmentRequest.fromPartial(base !== null && base !== void 0 ? base : {});
+    },
+    fromPartial(object) {
+        var _a, _b, _c;
+        const message = createBaseAddAmountWithRangeCommitmentRequest();
+        message.invoiceTotal = (_a = object.invoiceTotal) !== null && _a !== void 0 ? _a : "";
+        message.poBalance = (_b = object.poBalance) !== null && _b !== void 0 ? _b : "";
+        message.id = (_c = object.id) !== null && _c !== void 0 ? _c : "";
+        return message;
+    },
+};
+function createBaseAddAmountWithRangeCommitmentResponse() {
+    return { success: false, message: "", commitment: "", txHash: "" };
+}
+export const AddAmountWithRangeCommitmentResponse = {
+    encode(message, writer = new BinaryWriter()) {
+        if (message.success !== false) {
+            writer.uint32(8).bool(message.success);
+        }
+        if (message.message !== "") {
+            writer.uint32(18).string(message.message);
+        }
+        if (message.commitment !== "") {
+            writer.uint32(26).string(message.commitment);
+        }
+        if (message.txHash !== "") {
+            writer.uint32(34).string(message.txHash);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+        const end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseAddAmountWithRangeCommitmentResponse();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1: {
+                    if (tag !== 8) {
+                        break;
+                    }
+                    message.success = reader.bool();
+                    continue;
+                }
+                case 2: {
+                    if (tag !== 18) {
+                        break;
+                    }
+                    message.message = reader.string();
+                    continue;
+                }
+                case 3: {
+                    if (tag !== 26) {
+                        break;
+                    }
+                    message.commitment = reader.string();
+                    continue;
+                }
+                case 4: {
+                    if (tag !== 34) {
+                        break;
+                    }
+                    message.txHash = reader.string();
+                    continue;
+                }
+            }
+            if ((tag & 7) === 4 || tag === 0) {
+                break;
+            }
+            reader.skip(tag & 7);
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return {
+            success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
+            message: isSet(object.message) ? globalThis.String(object.message) : "",
+            commitment: isSet(object.commitment) ? globalThis.String(object.commitment) : "",
+            txHash: isSet(object.txHash) ? globalThis.String(object.txHash) : "",
+        };
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.success !== false) {
+            obj.success = message.success;
+        }
+        if (message.message !== "") {
+            obj.message = message.message;
+        }
+        if (message.commitment !== "") {
+            obj.commitment = message.commitment;
+        }
+        if (message.txHash !== "") {
+            obj.txHash = message.txHash;
+        }
+        return obj;
+    },
+    create(base) {
+        return AddAmountWithRangeCommitmentResponse.fromPartial(base !== null && base !== void 0 ? base : {});
+    },
+    fromPartial(object) {
+        var _a, _b, _c, _d;
+        const message = createBaseAddAmountWithRangeCommitmentResponse();
+        message.success = (_a = object.success) !== null && _a !== void 0 ? _a : false;
+        message.message = (_b = object.message) !== null && _b !== void 0 ? _b : "";
+        message.commitment = (_c = object.commitment) !== null && _c !== void 0 ? _c : "";
+        message.txHash = (_d = object.txHash) !== null && _d !== void 0 ? _d : "";
+        return message;
+    },
+};
 function createBaseAmountWithinRangeRequest() {
     return { invoiceTotal: "", poBalance: "", poBalanceHash: "" };
 }
@@ -527,6 +1076,15 @@ export const AmountWithinRangeResponse = {
     },
 };
 export const ZKPVerificationServiceService = {
+    addClauseInclusionCommitment: {
+        path: "/zkpVerification.ZKPVerificationService/AddClauseInclusionCommitment",
+        requestStream: false,
+        responseStream: false,
+        requestSerialize: (value) => Buffer.from(AddClauseInclusionCommitmentRequest.encode(value).finish()),
+        requestDeserialize: (value) => AddClauseInclusionCommitmentRequest.decode(value),
+        responseSerialize: (value) => Buffer.from(AddClauseInclusionCommitmentResponse.encode(value).finish()),
+        responseDeserialize: (value) => AddClauseInclusionCommitmentResponse.decode(value),
+    },
     verifyClauseInclusion: {
         path: "/zkpVerification.ZKPVerificationService/VerifyClauseInclusion",
         requestStream: false,
@@ -536,6 +1094,15 @@ export const ZKPVerificationServiceService = {
         responseSerialize: (value) => Buffer.from(VerifyClauseInclusionResponse.encode(value).finish()),
         responseDeserialize: (value) => VerifyClauseInclusionResponse.decode(value),
     },
+    addBgExpiry: {
+        path: "/zkpVerification.ZKPVerificationService/AddBGExpiry",
+        requestStream: false,
+        responseStream: false,
+        requestSerialize: (value) => Buffer.from(AddBGExpiryRequest.encode(value).finish()),
+        requestDeserialize: (value) => AddBGExpiryRequest.decode(value),
+        responseSerialize: (value) => Buffer.from(AddBGExpiryResponse.encode(value).finish()),
+        responseDeserialize: (value) => AddBGExpiryResponse.decode(value),
+    },
     bgExpiryCheck: {
         path: "/zkpVerification.ZKPVerificationService/BGExpiryCheck",
         requestStream: false,
@@ -544,6 +1111,15 @@ export const ZKPVerificationServiceService = {
         requestDeserialize: (value) => BGExpiryCheckRequest.decode(value),
         responseSerialize: (value) => Buffer.from(BGExpiryCheckResponse.encode(value).finish()),
         responseDeserialize: (value) => BGExpiryCheckResponse.decode(value),
+    },
+    addAmountWithRangeCommitment: {
+        path: "/zkpVerification.ZKPVerificationService/AddAmountWithRangeCommitment",
+        requestStream: false,
+        responseStream: false,
+        requestSerialize: (value) => Buffer.from(AddAmountWithRangeCommitmentRequest.encode(value).finish()),
+        requestDeserialize: (value) => AddAmountWithRangeCommitmentRequest.decode(value),
+        responseSerialize: (value) => Buffer.from(AddAmountWithRangeCommitmentResponse.encode(value).finish()),
+        responseDeserialize: (value) => AddAmountWithRangeCommitmentResponse.decode(value),
     },
     amountWithinRange: {
         path: "/zkpVerification.ZKPVerificationService/AmountWithinRange",

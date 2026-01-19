@@ -24,6 +24,7 @@ const generateClauseInclusionProof = (inputs, WASM_PATH, ZKEY_PATH) => __awaiter
         return { a, b, c, inputSignals };
     }
     catch (error) {
+        // console.log("The error we are geting in clause inclusion proof is", error);
         const normalised = normalizeZkpError(error);
         // console.log("Proof Generation failed", normalised);
         // throw new Error("CIRCUIT_CONSTRAINT_FAILED");
