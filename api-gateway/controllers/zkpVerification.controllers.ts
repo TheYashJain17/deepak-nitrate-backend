@@ -142,9 +142,11 @@ export const addBgExpiryCommitment = async (req: FastifyRequest, res: FastifyRep
 
         const { Ndays, POenddate, bgExpiry, bgId } = req.body as AddBGExpiryRequest;
 
+        console.log(Ndays, POenddate, bgExpiry, bgId);
+
         if (!Ndays || !POenddate || !bgExpiry || !bgId) {
 
-            return errorResponse(res, 400, "please provide Ndays,POenddata,bgExpiry,bgId");
+            return errorResponse(res, 400, "please provide Ndays,POenddate,bgExpiry,bgId");
 
         }
 

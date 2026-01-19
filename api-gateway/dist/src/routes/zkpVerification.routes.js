@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { amountWithinRangeVerification, bgExpiryCheckVerification, clauseInclusionVerification, healthRoute, } from "../../controllers/zkpVerification.controllers.js";
+import { addAmountWithinRangeCommitment, addBgExpiryCommitment, addClauseInclusionCommitment, amountWithinRangeVerification, bgExpiryCheckVerification, clauseInclusionVerification, healthRoute, } from "../../controllers/zkpVerification.controllers.js";
 import { ErrorResponse, SuccessResponse } from "../schemas/shared/response.schema.js";
 import { ClauseInclusionBody } from "../schemas/zkp/clauseInclusion.schema.js";
 import { BGExpiryCheckBody } from "../schemas/zkp/bgExpiryCheck.schema.js";
@@ -25,6 +25,7 @@ const zkpVerificationRoutes = (fastify) => __awaiter(void 0, void 0, void 0, fun
             },
         },
     }, healthRoute);
+    fastify.post("/clauseInclusion/addCommitment", addClauseInclusionCommitment);
     fastify.post("/clauseInclusion/verify", {
         schema: {
             tags: ["ZKP Verification"],
@@ -37,6 +38,7 @@ const zkpVerificationRoutes = (fastify) => __awaiter(void 0, void 0, void 0, fun
             },
         },
     }, clauseInclusionVerification);
+    fastify.post("/bgExpiryCheck/addCommitment", addBgExpiryCommitment);
     fastify.post("/bgExpiryCheck/verify", {
         schema: {
             tags: ["ZKP Verification"],
@@ -49,6 +51,7 @@ const zkpVerificationRoutes = (fastify) => __awaiter(void 0, void 0, void 0, fun
             },
         },
     }, bgExpiryCheckVerification);
+    fastify.post("/amountWithinRange/addCommitment", addAmountWithinRangeCommitment);
     fastify.post("/amountWithinRange/verify", {
         schema: {
             tags: ["ZKP Verification"],
